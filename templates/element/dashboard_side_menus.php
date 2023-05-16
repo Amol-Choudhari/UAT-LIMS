@@ -289,6 +289,39 @@
 					</li>
 
 				<?php } ?>
+				
+				
+				 <!-- added chemist training menu in sidebar for RAL Dasaboard by laxmi B. on 28-12-2022 -->
+					<?php if($current_user_roles['user_flag'] == 'RAL' || $current_user_roles['user_flag'] == 'CAL'){ ?>
+				            <li class="nav-item">
+							<li class="nav-item has-treeview">
+								<a href="#" class="nav-link">
+									<i class="nav-icon fas fa-flask"></i>
+									<p>Chemist Training<i class="fas  fa-angle-right right"></i></p>
+								</a>
+								<ul class="nav nav-treeview ">
+									<li class="nav-item has-treeview">
+										<li class="nav-item">
+											<a href="<?php echo $this->request->getAttribute("webroot");?>Chemist/listOfChemistApplRoToRal" class="bg-cyan nav-link">
+												<i class="fas fa-list nav-icon"></i>
+			 
+
+												<p class="nav-icon-p">Ro to RAL List</p>
+											</a>
+										</li>
+
+										<li class="nav-item">
+											<a href="<?php echo $this->request->getAttribute("webroot");?>Chemist/listOfChemistApplRalToRo" class="bg-cyan nav-link">
+												<i class="fas fa-list nav-icon"></i>
+												<p class="nav-icon-p">RAL to RO List</p>
+											</a>
+										</li>
+									</li>
+								</ul>
+							</li>
+						</li>
+			   <?php }?>
+
 
 			<?php } ?>
 
