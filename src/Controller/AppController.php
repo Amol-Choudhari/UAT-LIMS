@@ -114,7 +114,9 @@ class AppController extends Controller
 
 
 	//This function is use to generate all other normal pdfs in the system, without esign
-	public function callTcpdf($html,$mode,$file_name=null){
+	// for ral to ro training completed pdf added to parenthesis file_path and pdf_for  
+	//added by laxmi on 2-1-2023						 
+	public function callTcpdf($html,$mode,$file_name=null, $pdf_for=null, $file_path=null){
 
 		//generatin pdf starts here
 		//create new pdf using tcpdf
@@ -149,8 +151,19 @@ class AppController extends Controller
 			if($file_name == null){
 				$file_name = '';
 			}
-			$file_path = $_SERVER["DOCUMENT_ROOT"].'testdocs/LIMS/reports/'.$file_name;
+			// comment this file path and added in condtion in below for chemist is or not by laxmi Bhadade on 03-05-23
+			//$file_path = $_SERVER["DOCUMENT_ROOT"].'testdocs/LIMS/reports/'.$file_name;
 
+
+			//if else section added by laxmi B. on 02-01-2023
+			//for this file path is sent from the pdf function
+			//it will take default file path from the argument, if pdf for is chemist
+			if($pdf_for == "chemist"){
+             $file_path = $file_path;
+			}else{
+			  $file_path = $_SERVER["DOCUMENT_ROOT"].'testdocs/LIMS/reports/'.$file_name;
+			 }
+			
 			//Close and output PDF document
 			$pdf->my_output($file_path, $mode);
 			//generatin pdf ends here

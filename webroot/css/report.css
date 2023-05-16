@@ -71,3 +71,13 @@
     background: #708090;
     text-align: center;
 }
+
+/*to forward chemist app from RAL to Ro if checkbox is not checked hide submit button*/
+/*added by laxmi B. on 29-12-2022*/
+#submitbtn{
+    display: none;
+}
+/*increase check box size by laxmi B on 29-12-22*/
+#trainingCompleted{
+    transform: scale(2);
+}
