@@ -1,0 +1,13 @@
+input[type="text"] {
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .modal-header {background: rgb(250 235 215);}
+  .is-invalid {
+  
+    border: 1px solid #d92550 !important;
+  }
+  .is-invalidmsg{
+    color: 1px solid #d92550 !important;
+  }
