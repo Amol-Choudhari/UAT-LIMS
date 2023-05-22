@@ -34,16 +34,17 @@
       	 <td><?php echo $ral_offices;?></td>
       	 <td><?php echo $forwarded;?></td>
          <td><?php echo $shedule_to;?></td>
-         <td><a href="<?php echo $list['pdf_file'] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> |
+         <td>
            <?php if($list['is_forwordedtoral'] == 'yes' && (empty($is_training_completed[$i])) && empty($reshedule_status[$i])) {?>
 
           <a href="<?php echo $this->request->getAttribute('webroot');?>chemist/forward_applicationto_ro/<?php echo $list['id'];?>" class="btn btn-success">Confirm Training Dates</a>
           
           <?php }elseif($list['is_forwordedtoral'] == 'yes' && ($reshedule_status[$i] == 'confirm') && (empty($is_training_completed[$i]))) {?>
-
+            <a href="<?php echo $reschedule_pdf[$i] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> |
           <a href="<?php echo $this->request->getAttribute('webroot');?>chemist/forward_applicationto_ro/<?php echo $list['id'];?>" type="button" class="btn btn-success text-white">Mark Training Complete</a>
 
         <?php }elseif(!empty($is_training_completed[$i])){?>
+          <a href="<?php echo $reschedule_pdf[$i] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> |
           <p class="text-white bg-green"><b>Training Completed at RAL</b></p>
         <?php }?>
         </td> 

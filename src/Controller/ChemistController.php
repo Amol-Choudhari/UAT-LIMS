@@ -18,6 +18,7 @@
         public function beforeFilter($event) {
         parent::beforeFilter($event);    
         $this->viewBuilder()->setHelpers(['Form','Html']);
+		$username = $this->getRequest()->getSession()->read('username');
         $this->loadComponent('Customfunctions');
         $this->loadModel('DmiChemistRoToRalLogs');
         $ro_office_id = $_SESSION['posted_ro_office'];
@@ -40,6 +41,7 @@
         $ro_offices = array();
         $is_training_completed = array();
         $reshedule_status = array();
+        $reschedule_pdf  = array();
         if(!empty($listofApp)){
         foreach($listofApp as $list){
         $ro_offices[$i] = $this->DmiRoOffices->find('list',array('valueField'=>'ro_office', 'conditions'=>array('id IS'=>$list['ro_office_id'])))->first();
@@ -55,11 +57,12 @@
      
          if(!empty($is_confirm)){
          $reshedule_status[$i] = $is_confirm['reshedule_status'];
+         $reschedule_pdf [$i]  = $is_confirm['reshedule_pdf'];
          }
         $i= $i+1;	
         }
-        
-      
+       
+        $this->set('reschedule_pdf', $reschedule_pdf);
         $this->set('is_training_completed', $is_training_completed );
         $this->set('listOfChemistApp',$listofApp);
         $this->set('ro_office', $ro_offices);      
@@ -421,7 +424,7 @@
                 public function chemistApplTrainingScheduleAtRal($id){  
                 $this->viewBuilder()->setLayout('pdf_layout');    
                 $this->loadModel('DmiFirms');
-                $this->loadModel('DmiCustomers');
+                //$this->loadModel('DmiCustomers');
                 $this->loadModel('DmiDistricts');
                 $this->loadModel('DmiStates');
                 $this->loadModel('MCommodity');
