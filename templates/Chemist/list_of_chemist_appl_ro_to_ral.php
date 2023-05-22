@@ -47,6 +47,8 @@
           <a href="<?php echo $reschedule_pdf[$i] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> |
           <p class="text-white bg-green"><b>Training Completed at RAL</b></p>
         <?php }?>
+
+        <button id="rejectApp_<?php echo $list['id']; ?>" class = "rejectModel" value='<?php echo $list['chemist_id']; ?>' appl_type ="<?php echo $list['appliaction_type'] ?>"> <span class="glyphicon glyphicon-remove rejectAPP"></span></button>
         </td> 
      </tr>
      <?php $i++; }
@@ -55,5 +57,57 @@
   </tbody>
 </table>	
 </div>
+
 	
+<!-- reject application model body -->
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+ 
+
+<!--Modal content -->
+<div class="modal-content">
+ <div class="modal-header">
+  
+   <h4>Rejection of Application for Chemist Training</h4>
+   <span class="close">&times;</span>
+ </div>
+ <div class="modal-body">
+   <table id="rej-appl-table" class="table table-striped table-bordered">
+     <thead>
+       <tr>
+         <th>Application Type</th>
+         <th>Application Id</th>
+         <th>Remark/Reason</th>
+         <th>Action</th>
+     </tr>
+     </thead>
+     <tbody>
+       <tr>
+       <?php  echo $this->Form->create(null, array( 'enctype'=>'multipart/form-data', 'id'=>'rejectApp','class'=>'form_name'));  ?>
+         <td>
+          <?php echo $this->Form->control('application_type', array('type'=>'text', 'readonly'=>true, 'class'=>'cvOn cvReq cvAlphaNum applicationType', 'value'=>'', 'label'=>false)) ;?>
+         </td>
+         <td><?php echo $this->Form->control('application_id', array('type'=>'text', 'readonly'=>true, 'class'=>'cvOn cvReq cvAlphaNum chemistId ', 'label'=>false)) ;?>
+         
+       </td>
+         
+         <td><?php  echo $this->Form->control('remark', array('type'=>'textarea', 'id'=>'remark', 'escape'=>false,  'placeholder'=>'Enter Remark/Reason', 'value'=>'','class'=>'cvOn cvReq cvAlphaNum reject',   'label'=>false)); ?>
+         <div><b class="errorClass text-red"></b></div></td>
+         <td><a class="btn btn-primary" type="submit" id="rejectBtn">Reject</a></td>
+         <?php  echo $this->Form->end();  ?>
+       </tr>
+     </tbody>
+ </table>
+ </div>
+ <div class="modal-footer">
+ 
+ </div>
+</div> 
+
 </div>
+
+
+</div>
+<?php echo $this->Html->css('rejectAPP');?>
+<?php echo $this->Html->script('rejectAPP');?>
