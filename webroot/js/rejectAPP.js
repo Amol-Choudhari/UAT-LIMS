@@ -1,4 +1,4 @@
-//Create new file for reject chemist application at ro side  added by laxmi Bhadade on 16-05-2023 for chemist_training module
+//Create new file for reject chemist application at ral side  added by laxmi Bhadade on 22-05-2023 for chemist_training module
 
 $('document').ready(function(){
    

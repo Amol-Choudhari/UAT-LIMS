@@ -10,7 +10,8 @@
         use Cake\Utility\Xml;
         use FR3D;
         use Applicationformspdfs;//importing another controller class here
-        use TCPDF;	  
+        use TCPDF;	
+        use Cake\Datasource\ConnectionManager;  
            
         class ChemistController extends AppController {
 
@@ -35,9 +36,13 @@
 
 
         $this->loadModel('DmiRoOffices');
-
-        $listofApp = $this->DmiChemistRoToRalLogs->find('all')->where(array('is_forwordedtoral IS NOT '=>NULL, 'ral_office_id IS'=>$ral_office_id))->order('created desc')->toArray();
-
+        $this->loadModel('DmiRejectedApplLogs');
+      
+        $query = "SELECT * FROM dmi_chemist_ro_to_ral_logs  WHERE chemist_id NOT IN (SELECT customer_id FROM dmi_rejected_appl_logs) AND is_forwordedtoral != '' AND ral_office_id ='".$ral_office_id."' ";
+        $conn = ConnectionManager::get('default');
+        $listofAppl = $conn->execute($query);
+        $listofApp =  $listofAppl->fetchAll('assoc');
+        
         $i=0;
         $ro_offices = array();
         $is_training_completed = array();
@@ -63,8 +68,8 @@
          }
 
          // to get application type by application type id
-         $application_type = $this->DmiApplicationTypes->find('all',['conitions'=>array('id IS'=>$list['application_type'])])->first();
-         $appl_type[$i] = $application_type['application_type'];
+         $appli_type = $this->DmiApplicationTypes->find('all',['conitions'=>array('id IS'=> $list['application_type'])])->last();
+         $appl_type[$i] = $appli_type['application_type'];
         $i= $i+1;	
         }
       
@@ -579,7 +584,10 @@
                 }
                 }
 
-
+                  //for reject chemist application by RAL officer forwarded from Ro to RAL 
+                  //added by Laxmi Bhadade
+                  //dated 22-05-2023 
+                  //for chemist Training Module
                 public function chemistApplicationReject(){
                   $this->setLayout= false;
                   $this->autoRender = false;
