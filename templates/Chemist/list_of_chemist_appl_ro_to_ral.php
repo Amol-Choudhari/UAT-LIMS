@@ -48,7 +48,7 @@
           <p class="text-white bg-green"><b>Training Completed at RAL</b></p>
         <?php }?>
 
-        <button id="rejectApp_<?php echo $list['id']; ?>" class = "rejectModel" value='<?php echo $list['chemist_id']; ?>' appl_type ="<?php echo $list['appliaction_type'] ?>"> <span class="glyphicon glyphicon-remove rejectAPP"></span></button>
+        <button id="rejectApp_<?php echo $list['id']; ?>" class = "rejectModel" value='<?php echo $list['chemist_id']; ?>' appl_type ="<?php echo $appl_type[$i] ?>"> <span class="glyphicon glyphicon-remove rejectAPP"></span></button>
         </td> 
      </tr>
      <?php $i++; }

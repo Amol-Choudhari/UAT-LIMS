@@ -63,6 +63,7 @@ $('document').ready(function(){
                 $('#remark').val('');
             },
             error: function () {
+                
                 $.alert({
                     content:"Something went wrong, Please try again.",
                     onClose: function(){

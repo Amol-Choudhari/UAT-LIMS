@@ -29,6 +29,7 @@
         $this->viewBuilder()->setLayout('admin_dashboard');
         $this->loadModel('DmiChemistRoToRalLogs');
         $this->loadModel('DmiChemistRalToRoLogs');
+        $this->loadModel('DmiApplicationTypes');
         $ro_office_id = $_SESSION['posted_ro_office'];
         $ral_office_id = $_SESSION['posted_ro_office'];	
 
@@ -42,6 +43,7 @@
         $is_training_completed = array();
         $reshedule_status = array();
         $reschedule_pdf  = array();
+        $appl_type = array();
         if(!empty($listofApp)){
         foreach($listofApp as $list){
         $ro_offices[$i] = $this->DmiRoOffices->find('list',array('valueField'=>'ro_office', 'conditions'=>array('id IS'=>$list['ro_office_id'])))->first();
@@ -59,9 +61,14 @@
          $reshedule_status[$i] = $is_confirm['reshedule_status'];
          $reschedule_pdf [$i]  = $is_confirm['reshedule_pdf'];
          }
+
+         // to get application type by application type id
+         $application_type = $this->DmiApplicationTypes->find('all',['conitions'=>array('id IS'=>$list['application_type'])])->first();
+         $appl_type[$i] = $application_type['application_type'];
         $i= $i+1;	
         }
-       
+      
+        $this->set('appl_type', $appl_type);
         $this->set('reschedule_pdf', $reschedule_pdf);
         $this->set('is_training_completed', $is_training_completed );
         $this->set('listOfChemistApp',$listofApp);
@@ -570,6 +577,55 @@
                 $this->redirect('/dashboard/home');
 
                 }
+                }
+
+
+                public function chemistApplicationReject(){
+                  $this->setLayout= false;
+                  $this->autoRender = false;
+                  
+                  
+                  if($this->request->is('post')){
+                    $reqData = $this->request->getData();
+                   
+                    $app_type = $reqData['appl_type'];
+                    $chemistId = $reqData['chemist_id'];
+                    $reason    = $reqData['remark'];
+                    $byuser    = $this->Session->read('username');
+
+                    $this->loadModel('DmiRejectedApplLogs');
+                    $this->loadModel('DmiApplicationTypes');
+
+                    $appl_type = $this->DmiApplicationTypes->find('all',array('fields'=>['id'], 'conditions'=>['application_type'=>$app_type]))->first();
+                    
+                    if($appl_type['id'] == 4) {
+
+                      $form_type='CHM';
+                    }
+                                
+                    if(!empty($reason)){
+                                $DmiRejectedApplLogsEntity = $this->DmiRejectedApplLogs->newEntity(
+                      array(
+                        'appl_type'   => $appl_type['id'],
+                        'form_type'   => $form_type,
+                        'customer_id' => $chemistId,
+                        'by_user'     => $byuser,
+                        'remark'      => $reason,
+                        'created'     => date('Y-m-d H:i:s'),
+                      ));
+                    }else{
+                      $message = "Please enter all fields data.";
+                    }
+
+                                
+                    if($this->DmiRejectedApplLogs->save($DmiRejectedApplLogsEntity) ) {
+                                      $message ="Application Rejected successfully.";
+                    }else{
+                      $message ="Something went wrong, Please try Again.";
+                    }
+                                  
+                  }
+
                 }
 
 	}
