@@ -68,11 +68,12 @@
          }
 
          // to get application type by application type id
-         $appli_type = $this->DmiApplicationTypes->find('all',['conitions'=>array('id IS'=> $list['appliaction_type'])])->last();
+         $appli_type = $this->DmiApplicationTypes->find('all',['conitions'=>array('id IS'=> $list['appliaction_type'])])->first();
          $appl_type[$i] = $appli_type['application_type'];
         $i= $i+1;	
         }
-      
+        
+       
         $this->set('appl_type', $appl_type);
         $this->set('reschedule_pdf', $reschedule_pdf);
         $this->set('is_training_completed', $is_training_completed );
