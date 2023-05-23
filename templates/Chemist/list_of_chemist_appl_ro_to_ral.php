@@ -47,9 +47,10 @@
           <a href="<?php echo $reschedule_pdf[$i] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> |
           <p class="text-white bg-green"><b>Training Completed at RAL</b></p>
         <?php }?>
-
+        <?php if(empty($is_training_completed[$i])){ ?>
         <button id="rejectApp_<?php echo $list['id']; ?>" class = "rejectModel" value='<?php echo $list['chemist_id']; ?>' appl_type ="<?php echo $appl_type[$i] ?>"> <span class="glyphicon glyphicon-remove rejectAPP"></span></button>
-        </td> 
+        <?php } ?>
+      </td> 
      </tr>
      <?php $i++; }
 	  } ?>
