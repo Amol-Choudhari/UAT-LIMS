@@ -26,7 +26,7 @@
         }
 
         //for list of chemist application forwarded by RO  added by laxmi B. on 28-12-2022
-        public function listOfChemistApplRoToRal(){
+        public function listOfChemistApplRoToRal(){ 
         $this->viewBuilder()->setLayout('admin_dashboard');
         $this->loadModel('DmiChemistRoToRalLogs');
         $this->loadModel('DmiChemistRalToRoLogs');
@@ -50,7 +50,7 @@
         $reschedule_pdf  = array();
         $appl_type = array();
         if(!empty($listofApp)){
-        foreach($listofApp as $list){
+        foreach($listofApp as $list){ 
         $ro_offices[$i] = $this->DmiRoOffices->find('list',array('valueField'=>'ro_office', 'conditions'=>array('id IS'=>$list['ro_office_id'])))->first();
 
         $is_training_complete = $this->DmiChemistRalToRoLogs->find('all')->where(array('chemist_id IS'=>$list['chemist_id'], 'training_completed IS'=>1))->last();
@@ -68,7 +68,7 @@
          }
 
          // to get application type by application type id
-         $appli_type = $this->DmiApplicationTypes->find('all',['conitions'=>array('id IS'=> $list['application_type'])])->last();
+         $appli_type = $this->DmiApplicationTypes->find('all',['conitions'=>array('id IS'=> $list['appliaction_type'])])->last();
          $appl_type[$i] = $appli_type['application_type'];
         $i= $i+1;	
         }
