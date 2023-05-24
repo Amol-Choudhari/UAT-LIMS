@@ -52,7 +52,7 @@
         if(!empty($listofApp)){
         foreach($listofApp as $list){ 
         $ro_offices[$i] = $this->DmiRoOffices->find('list',array('valueField'=>'ro_office', 'conditions'=>array('id IS'=>$list['ro_office_id'])))->first();
-
+        
         $is_training_complete = $this->DmiChemistRalToRoLogs->find('all')->where(array('chemist_id IS'=>$list['chemist_id'], 'training_completed IS'=>1))->last();
 
         if(!empty( $is_training_complete)){
