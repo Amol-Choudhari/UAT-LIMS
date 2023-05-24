@@ -85,6 +85,7 @@
 				<?php echo $ral_fname ."&nbsp;". $ral_lname; ?>,<br>
 				<?php echo $ral_role;?>,<br>
 				Regional Agmark Laboratory,<br> 
+                <?php echo $ral_office; ?><br>
 				RAL Office.<br>
 			</td>
 		</tr>

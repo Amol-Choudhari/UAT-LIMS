@@ -216,7 +216,7 @@
                   $this->DmiChemistAllCurrentPositions->currentUserUpdate($customer_id,$user_email_id,$current_level);
                 }
 
-             $message ="Chemist Application Forwarded to RO Office ".$office_name."And the email id is".office_incharge_id."";
+             $message ="Chemist Application Forwarded to RO Office ".$office_name. " And the email id is " .base64_decode($office_incharge_id)."";
              $message_theme = "success";
              $redirect_to = '../chemistApplRalToRo/'.$lastInsertedId;
              }else{
@@ -379,7 +379,10 @@
 
                  $this->set('schedule_from',$from);
                  $this->set('schedule_to',$to);
-
+                 $ral_office = $this->DmiRoOffices->find('all', ['conditions'=>array('id IS'=>$scheduleDates['ral_office_id'])])->first();
+                  if(!empty($ral_office)){
+                   $this->set('ral_office', $ral_office['ro_office']);
+                  }
                 }
                   
                   $customer_id = $ralforwardedRo['chemist_id'];  
