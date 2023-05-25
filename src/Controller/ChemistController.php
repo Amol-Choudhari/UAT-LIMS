@@ -38,7 +38,7 @@
         $this->loadModel('DmiRoOffices');
         $this->loadModel('DmiRejectedApplLogs');
       
-        $query = "SELECT * FROM dmi_chemist_ro_to_ral_logs  WHERE chemist_id NOT IN (SELECT customer_id FROM dmi_rejected_appl_logs) AND is_forwordedtoral != '' AND ral_office_id ='".$ral_office_id."' ";
+        $query = "SELECT * FROM dmi_chemist_ro_to_ral_logs  WHERE chemist_id NOT IN (SELECT customer_id FROM dmi_rejected_appl_logs) AND is_forwordedtoral != '' AND ral_office_id ='".$ral_office_id."' ORDER BY id DESC";
         $conn = ConnectionManager::get('default');
         $listofAppl = $conn->execute($query);
         $listofApp =  $listofAppl->fetchAll('assoc');
@@ -183,10 +183,11 @@
              'ral_office_id' =>$ral_office_id,
             'reshedule_to_date' => date('Y-m-d H:i:s', strtotime(str_replace('/','-',$fetchData['reshedule_to_date']))),
              'reshedule_from_date' => date('Y-m-d H:i:s', strtotime(str_replace('/','-',$fetchData['reshedule_from_date']))),
-             'check_reschedule' => 'confirm'
+             'reshedule_status' => 'confirm',
              ));
-               
+              
              $result = $this->DmiChemistRalToRoLogs->save($data);
+            
              if($result){   
              $lastInsertedId = $result['id'];
 
@@ -206,13 +207,14 @@
                        'modified'=>date('Y-m-d H:i:s')
                      ));
 
-                if($this->DmiChemistAllocations->save($allocationEntity)){
-
+               if($this->DmiChemistAllocations->save($allocationEntity)){
+               
                    $this->loadModel('DmiChemistAllCurrentPositions');
                   //Entry in all applications current position table
                   $customer_id =  $chemist_id;
                   $user_email_id = $office_incharge_id;
                   $current_level = 'level_3';
+                 
                   $this->DmiChemistAllCurrentPositions->currentUserUpdate($customer_id,$user_email_id,$current_level);
                 }
 
