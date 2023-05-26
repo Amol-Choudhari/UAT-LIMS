@@ -79,7 +79,7 @@
           }
        
        // to get reshedule status
-        $is_confirm = $this->DmiChemistRalToRoLogs->find('all')->where(array('chemist_id IS'=>$list['chemist_id']))->last();
+        $is_confirm = $this->DmiChemistRalToRoLogs->find('all')->where(array('chemist_id IS'=>$list['chemist_id'], 'training_completed IS'=>NULL))->last();
      
          if(!empty($is_confirm)){
          $reshedule_status[$i] = $is_confirm['reshedule_status'];
