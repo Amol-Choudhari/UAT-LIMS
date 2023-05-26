@@ -19,7 +19,26 @@
         public function beforeFilter($event) {
         parent::beforeFilter($event);    
         $this->viewBuilder()->setHelpers(['Form','Html']);
-		$username = $this->getRequest()->getSession()->read('username');
+		    $username = $this->getRequest()->getSession()->read('username');
+        $username = $this->getRequest()->getSession()->read('username');
+        
+        
+        
+        if ($username == null) {
+          $this->customAlertPage('Sorry You are not authorized to view this page..');
+          exit;
+        } else {
+
+          $this->loadModel('DmiUsers');
+          //check if user entry in Dmi_users table for valid user
+          $check_user = $this->DmiUsers->find('all',array('conditions'=>array('email'=>$this->Session->read('username'))))->first();
+          
+          if (empty($check_user)) {
+            $this->customAlertPage('Sorry You are not authorized to view this page..');
+            exit;
+          }
+        }
+
         $this->loadComponent('Customfunctions');
         $this->loadModel('DmiChemistRoToRalLogs');
         $ro_office_id = $_SESSION['posted_ro_office'];
