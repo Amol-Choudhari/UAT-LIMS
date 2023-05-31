@@ -33,7 +33,7 @@
          <?php if($list['training_completed'] == 1){ ?>
          <td><?php echo "Completed";?></td>
          <?php } ?>
-         <td><a href="<?php echo '../chemistApplRalToRo/'.$list['id'] ;?>" target="_blank" type="application/pdf" rel="alternate">View Relieving Letter</a> </td> 
+         <td><a href="<?php echo $list['pdf_file'] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> </td> 
      </tr>
      <?php $i++; } 
    } ?>

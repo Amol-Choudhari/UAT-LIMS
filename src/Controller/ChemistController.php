@@ -239,8 +239,7 @@
 
              $message ="Chemist Application Forwarded to RO Office ".$office_name. " And the email id is " .base64_decode($office_incharge_id)."";
              $message_theme = "success";
-             //$redirect_to = '../chemistApplRalToRo/'.$lastInsertedId;
-             $redirect_to = '../listOfChemistApplRalToRo/';
+             $redirect_to = '../chemistApplRalToRo/'.$lastInsertedId;
              }else{
              $message ="Something went wrong, Please Try Again!";
              $message_theme = "warning";
@@ -280,8 +279,8 @@
             $lastInsertedId = $result['id'];
             $message ="Chemist Training Schedule Successfully.";
             $message_theme = "success";
-            //$redirect_to = '../chemistApplTrainingScheduleAtRal/'.$lastInsertedId;
-             $redirect_to = '../listOfChemistApplRoToRal';
+            $redirect_to = '../chemistApplTrainingScheduleAtRal/'.$lastInsertedId;
+             
             }else{
              $message ="Something went wrong, Please Try Again!";
              $message_theme = "warning";
@@ -446,10 +445,11 @@
 		                $file_path = $_SERVER["DOCUMENT_ROOT"].$file_path;
                           
 		                //to preview application
+                    //$this->callTcpdf($all_data_pdf,'I',$customer_id,'chemist',$file_path);//on with preview mode
 		                $this->callTcpdf($all_data_pdf,'F',$customer_id,'chemist',$file_path);//with save mode
-		                $this->callTcpdf($all_data_pdf,'I',$customer_id,'chemist',$file_path);//on with preview mode
+		               
 		
-		                $this->redirect('/dashboard/home');
+		                $this->redirect('/Chemist/listOfChemistApplRalToRo');
                
                  
               }
@@ -610,9 +610,9 @@
                 $file_path = $_SERVER["DOCUMENT_ROOT"].$file_path;
                 //to preview application
                 $this->callTcpdf($all_data_pdf,'F',$customer_id,'chemist',$file_path);//with save mode
-                $this->callTcpdf($all_data_pdf,'I',$customer_id,'chemist',$file_path);//on with preview mode
+                //$this->callTcpdf($all_data_pdf,'I',$customer_id,'chemist',$file_path);//on with preview mode
 
-                $this->redirect('/dashboard/home');
+                $this->redirect('/Chemist/listOfChemistApplRoToRal');
 
                 }
                 }
