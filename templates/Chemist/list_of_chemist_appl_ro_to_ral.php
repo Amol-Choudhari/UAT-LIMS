@@ -40,11 +40,11 @@
           <a href="<?php echo $this->request->getAttribute('webroot');?>chemist/forward_applicationto_ro/<?php echo $list['id'];?>" class="btn btn-success">Confirm Training Dates</a>
           
           <?php }elseif($list['is_forwordedtoral'] == 'yes' && ($reshedule_status[$i] == 'confirm') && (empty($is_training_completed[$i]))) {?>
-            <a href="<?php echo $reschedule_pdf[$i] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> |
+            <a href="<?php echo './chemistApplTrainingScheduleAtRal/'.$list['id'];?>" target="_blank" type="application/pdf" rel="alternate"> View Schedule Letter</a> |
           <a href="<?php echo $this->request->getAttribute('webroot');?>chemist/forward_applicationto_ro/<?php echo $list['id'];?>" type="button" class="btn btn-success text-white">Mark Training Complete</a>
 
         <?php }elseif(!empty($is_training_completed[$i])){?>
-          <a href="<?php echo $reschedule_pdf[$i] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> |
+          <a href="<?php echo './chemistApplTrainingScheduleAtRal/'.$list['id'];?>" target="_blank" type="application/pdf" rel="alternate">Schedule Letter</a> |
           <p class="text-white bg-green"><b>Training Completed at RAL</b></p>
         <?php }?>
         <?php if(empty($is_training_completed[$i])){ ?>

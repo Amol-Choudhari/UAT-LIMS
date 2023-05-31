@@ -239,7 +239,8 @@
 
              $message ="Chemist Application Forwarded to RO Office ".$office_name. " And the email id is " .base64_decode($office_incharge_id)."";
              $message_theme = "success";
-             $redirect_to = '../chemistApplRalToRo/'.$lastInsertedId;
+             //$redirect_to = '../chemistApplRalToRo/'.$lastInsertedId;
+             $redirect_to = '../listOfChemistApplRalToRo/';
              }else{
              $message ="Something went wrong, Please Try Again!";
              $message_theme = "warning";
@@ -279,7 +280,8 @@
             $lastInsertedId = $result['id'];
             $message ="Chemist Training Schedule Successfully.";
             $message_theme = "success";
-            $redirect_to = '../chemistApplTrainingScheduleAtRal/'.$lastInsertedId;
+            //$redirect_to = '../chemistApplTrainingScheduleAtRal/'.$lastInsertedId;
+             $redirect_to = '../listOfChemistApplRoToRal';
             }else{
              $message ="Something went wrong, Please Try Again!";
              $message_theme = "warning";
@@ -458,7 +460,7 @@
                 //  added by laxmi B. 09-05-2023
                 // Chemist Training module
               
-                public function chemistApplTrainingScheduleAtRal($id){  
+                public function chemistApplTrainingScheduleAtRal($id){ 
                 $this->viewBuilder()->setLayout('pdf_layout');    
                 $this->loadModel('DmiFirms');
                 //$this->loadModel('DmiCustomers');
@@ -476,13 +478,13 @@
 
                 $customer_id = $this->Session->read('customer_id'); 
                 $application_type = $this->Session->read('application_type');
-                $ro_fname = $this->Session->read('f_name');
-                $ro_lname = $this->Session->read('l_name');
-                $role = $this->Session->read('role');
+                // $ro_fname = $this->Session->read('f_name');
+                // $ro_lname = $this->Session->read('l_name');
+                // $role = $this->Session->read('role');
                 $this->set('customer_id', $customer_id);
-                $this->set('ro_fname', $ro_fname);
-                $this->set('ro_lname', $ro_lname);
-                $this->set('role', $role);
+                // $this->set('ro_fname', $ro_fname);
+                // $this->set('ro_lname', $ro_lname);
+                // $this->set('role', $role);
 
 
                 $pdf_date = date('d-m-Y');  
@@ -543,15 +545,21 @@
                 $ral_officeData = $this->DmiChemistRoToRalLogs->find('all')->where(array('chemist_id IS'=>$customer_id))->first();
                 
                 if(!empty($ral_officeData)){
+                  
                 $ral_id = $ral_officeData['ral_office_id'];
                 $ral_office = $this->DmiRoOffices->find('all')->where(array('id IS'=>$ral_id))->first();
                 $this->set('ral_office', $ral_office['ro_office']);
                 $this->set('ral_office_address', $ral_office['ro_office_address']);
+                $this->set('ro_fname',$ral_officeData['ro_first_name']);
+                $this->set('ro_lname', $ral_officeData['ro_last_name']);
+                
 
                 //ro office
-                $ro_office = $this->DmiRoOffices->find('all', ['fields'=>['ro_office'], 'conditions'=>['id IS'=>$ral_officeData['ro_office_id']]])->first();
+                $ro_office = $this->DmiRoOffices->find('all', ['conditions'=>['id IS'=>$ral_officeData['ro_office_id']]])->first();
+            
                 if(!empty($ro_office)){
                     $this->set('ro_office',$ro_office['ro_office']);
+                    $this->set('role','RO/SO');
                 }
                
                 // get reschedule from and to date
