@@ -2,6 +2,8 @@
 
 $('document').ready(function(){
    
+
+    $('.ro_to_ral').DataTable();
     var span = document.getElementsByClassName("close")[0];
     
     var reject_id = document.getElementsByClassName("rejectModel");
@@ -87,5 +89,7 @@ $(document).ready(function(){
       window.localStorage.setItem('ConfirmClick','yes');
       $("#rescheduleDates")[0].click();
     });
+
+
   
   });

@@ -1,4 +1,5 @@
 jQuery(document).ready(function($) {
+  $('.ral_to_ro').DataTable();
 	$(function() {
   $("#trainingCompleted").on("click",function() {
     if($('#trainingCompleted').is(':checked')){

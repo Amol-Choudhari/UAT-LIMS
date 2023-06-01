@@ -4,7 +4,7 @@
        <hr/>
     </div>
 <div class="row">
- <table class="table table-bordered">
+ <table class="table table-bordered ral_to_ro">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -43,3 +43,5 @@
 </div>
 	
 </div>
+
+<?php echo $this->Html->script('forward_applicationto_ro');?>
