@@ -132,8 +132,8 @@
                     </div>
                     <div class="col-md-2"></div>
 
-                    <div class="col-md-2">
-                    <button type="submit" value="submit" id="submitbtn" class="form-control btn btn-success">Training Compltete
+                    <div class="col-md-3">
+                    <button type="submit" value="submit" id="submitbtn" class="form-control btn btn-success">Training Completed
                     </button>
                     </div>
                     </div>
@@ -142,8 +142,8 @@
                     </div>
                     <?php }else{ ?>
                     <div class="col-md-2"></div>
-                    <div class="col-md-2">
-                    <button type="submit" value="submit" id="submitbtnn" class="form-control btn btn-success">Confirm Dates
+                    <div class="col-md-3">
+                    <button type="submit" value="submit" id="submitbtnn" class="form-control btn btn-success">Reschedule Dates
                     </button>
                     <?php } ?>
                     <?php  echo $this->Form->end();  ?>
