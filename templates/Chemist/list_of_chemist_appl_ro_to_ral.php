@@ -37,7 +37,9 @@
          <td>
            <?php if($list['is_forwordedtoral'] == 'yes' && (empty($is_training_completed[$i])) && empty($reshedule_status[$i])) {?>
 
-          <a href="<?php echo $this->request->getAttribute('webroot');?>chemist/forward_applicationto_ro/<?php echo $list['id'];?>" class="btn btn-success">Confirm Training Dates</a>
+          <a class=" btn btn-success text-white trainingConfirm" id="trainingDatesConfirm">Confirm Dates</a>
+
+          <a href="<?php echo $this->request->getAttribute('webroot');?>chemist/forward_applicationto_ro/<?php echo $list['id'];?>" class="btn btn-success reschedule" id="rescheduleDates">Reschedule Training Dates</a>
           
           <?php }elseif($list['is_forwordedtoral'] == 'yes' && ($reshedule_status[$i] == 'confirm') && (empty($is_training_completed[$i]))) {?>
             <a href="<?php echo $reschedule_pdf[$i] ;?>" target="_blank" type="application/pdf" rel="alternate">View Letter</a> |
@@ -48,7 +50,7 @@
           <p class="text-white bg-green"><b>Training Completed at RAL</b></p>
         <?php }?>
         <?php if(empty($is_training_completed[$i])){ ?>
-        <button id="rejectApp_<?php echo $list['id']; ?>" class = "rejectModel" value='<?php echo $list['chemist_id']; ?>' appl_type ="<?php echo $appl_type[$i] ?>"> <span class="glyphicon glyphicon-remove rejectAPP"></span></button>
+         <br> <button id="rejectApp_<?php echo $list['id']; ?>" class = "rejectModel" value='<?php echo $list['chemist_id']; ?>' appl_type ="<?php echo $appl_type[$i] ?>"> <span class="glyphicon glyphicon-remove rejectAPP"></span></button>
         <?php } ?>
       </td> 
      </tr>
@@ -112,3 +114,4 @@
 </div>
 <?php echo $this->Html->css('rejectAPP');?>
 <?php echo $this->Html->script('rejectAPP');?>
+

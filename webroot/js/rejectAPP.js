@@ -78,3 +78,14 @@ $('document').ready(function(){
       });
     
     });
+
+
+    //for confirm dates open quitely reschedule form and set values
+$(document).ready(function(){
+    $('#trainingDatesConfirm').click(function(e){
+      e.preventDefault();
+      window.localStorage.setItem('ConfirmClick','yes');
+      $("#rescheduleDates")[0].click();
+    });
+  
+  });

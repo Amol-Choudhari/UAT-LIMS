@@ -45,9 +45,18 @@ jQuery(document).ready(function($) {
    
     $('#sheduleFrom').datepicker('setEndDate', FromEndDate);
 });
-  
-  
+});
 
 
+
+
+
+//for confirm dates open quitely reschedule form and set values
+$(document).ready(function(){
+  var localStorageItem = window.localStorage.getItem('ConfirmClick');
+  if(localStorageItem == 'yes'){
+    window.localStorage.removeItem('ConfirmClick');
+    $("#submitbtnn")[0].click();
+  }
 
 });
