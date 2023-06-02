@@ -256,37 +256,45 @@
             $chemist_id = $resheduleData['chemist_id'];
             if(!empty($resheduleData['reshedule_from_date']) && !empty($resheduleData['reshedule_to_date'])){
 
-            $this->loadModel('DmiChemistRalToRoLogs');
-            $ral_office_id = $this->Session->read('posted_ro_office');
-            $data = $this->DmiChemistRalToRoLogs->newEntity(array(
-            'chemist_id' => $chemist_id,
-            'chemist_first_name' => $resheduleData['chemist_first_name'],
-            'chemist_last_name'  => $resheduleData['chemist_last_name'],
-            'ro_first_name'      =>$resheduleData['ro_first_name'],
-            'ro_last_name'      =>$resheduleData['ro_last_name'],
-            'reshedule_from_date' => date('Y-m-d H:i:s', strtotime(str_replace('/','-', $resheduleData['reshedule_from_date']))),
-            'reshedule_to_date' => date('Y-m-d H:i:s', strtotime(str_replace('/','-',$resheduleData['reshedule_to_date']))),
-            'reshedule_remark'=> $resheduleData['remark'],
-            'reshedule_status'=>'confirm',
-            'ro_office_id'    =>$ro_office_id,
-            'ral_office_id'   =>$this->Session->read('posted_ro_office'),
-            'application_type'=> 4,
+            $from = date('d-m-Y',strtotime(str_replace('/','-',$resheduleData['reshedule_from_date'])));
+			      $to   = date('d-m-Y',strtotime(str_replace('/','-',$resheduleData['reshedule_to_date'])));
+	
+			      if($from < $to){
+                $this->loadModel('DmiChemistRalToRoLogs');
+                $ral_office_id = $this->Session->read('posted_ro_office');
+                $data = $this->DmiChemistRalToRoLogs->newEntity(array(
+                'chemist_id' => $chemist_id,
+                'chemist_first_name' => $resheduleData['chemist_first_name'],
+                'chemist_last_name'  => $resheduleData['chemist_last_name'],
+                'ro_first_name'      =>$resheduleData['ro_first_name'],
+                'ro_last_name'      =>$resheduleData['ro_last_name'],
+                'reshedule_from_date' => date('Y-m-d H:i:s', strtotime(str_replace('/','-', $resheduleData['reshedule_from_date']))),
+                'reshedule_to_date' => date('Y-m-d H:i:s', strtotime(str_replace('/','-',$resheduleData['reshedule_to_date']))),
+                'reshedule_remark'=> $resheduleData['remark'],
+                'reshedule_status'=>'confirm',
+                'ro_office_id'    =>$ro_office_id,
+                'ral_office_id'   =>$this->Session->read('posted_ro_office'),
+                'application_type'=> 4,
 
-            ));
-            
-           $result = $this->DmiChemistRalToRoLogs->save($data);
-            if($result){
-            $lastInsertedId = $result['id'];
-            $message ="Chemist Training Schedule Successfully.";
-            $message_theme = "success";
-            $redirect_to = '../chemistApplTrainingScheduleAtRal/'.$lastInsertedId;
-             
-            }else{
-             $message ="Something went wrong, Please Try Again!";
-             $message_theme = "warning";
-             $redirect_to = '../listOfChemistApplRoToRal';
-             }
-
+                ));
+                
+               $result = $this->DmiChemistRalToRoLogs->save($data);
+                if($result){
+                $lastInsertedId = $result['id'];
+                $message ="Chemist Training Schedule Successfully.";
+                $message_theme = "success";
+                $redirect_to = '../chemistApplTrainingScheduleAtRal/'.$lastInsertedId;
+                
+                }else{
+                $message ="Something went wrong, Please Try Again!";
+                $message_theme = "warning";
+                $redirect_to = '../listOfChemistApplRoToRal';
+                }
+              }else{
+                $message ="Always select From date gretter than To Dates!";
+                $message_theme = "warning";
+                $redirect_to = '../forwardApplicationtoRo/'.$id.'';
+              } 
             }else{
             $message ="Please Enter all Field data";
             $message_theme = "warning";
