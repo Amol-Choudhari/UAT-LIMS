@@ -87,11 +87,11 @@
   /*  */
 
   #rescheduleDates {
-    position: relative;
-    top: 3;
+    position: relative !important;
+    top: 3 !important;
   }
 
   .rejectModel{
-    position: relative;
-    top: 6px;
+    position: relative !important;
+    top: 6px !important;
   }

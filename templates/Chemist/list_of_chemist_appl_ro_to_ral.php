@@ -112,6 +112,7 @@
 
 
 </div>
-<?php echo $this->Html->css('rejectAPP');?>
-<?php echo $this->Html->script('rejectAPP');?>
+
+<?php echo $this->Html->script('rejectAPP'); ?>
+<?php echo $this->Html->css('rejectApp'); ?>
 
