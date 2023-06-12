@@ -82,4 +82,16 @@
     height: 45px;
     color: #000;
     border: 1px solid #ccc;
+    
+  }
+  /*  */
+
+  #rescheduleDates {
+    position: relative;
+    top: 3;
+  }
+
+  .rejectModel{
+    position: relative;
+    top: 6px;
   }
