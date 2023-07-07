@@ -64,8 +64,8 @@
 									<?php
 									
 										$num = $zscorearr[$i][$l];
-										//number format in not match display NA
-										if($num != 'NA'){
+										//number format 
+										if(is_numeric($num)){
 
 											$format = floor($num * 100)/100;
 										}else{
@@ -75,23 +75,15 @@
 
 									<!-- if value is not numeric show dropdown list  Dtae: 16-03-2023-->
 									<td>
-										<?php echo $org_val[$i][$l]; 
-										//$org_opt_val = $org_val[$i][$l];
-										// if($org_opt_val == 'Positive'||$org_opt_val =='Present'){
-										// 	$org_option = array('Satisfactory');
-										// }else{
-										// 	$org_option = array('Un-Satisfactory');
-										// }
-
-										?>
+										<?php echo $org_val[$i][$l]; ?>
 									</td>
 									<td>
 										<?php 
 										if(is_numeric($format)){
 											echo $format; 
 										}else{
-											echo $this->Form->control('org_val', array('type'=>'select', 'options'=>array('Satisfactory','Un-Satisfactory'), 'value'=>array('Satisfactory','Un-Satisfactory'), 'label'=>false,'class'=>'form-control org_val','required'=>true,));
-											// 'options'=>$org_option,
+
+											echo $this->Form->control('org_val', array('type'=>'select', 'options'=>array('Satisfactory','Un-Satisfactory'), 'value'=>'', 'label'=>false,'class'=>'form-control org_val','required'=>true,));	
 										}
 										?>
 									</td>

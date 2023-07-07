@@ -533,26 +533,36 @@
 		//Date - 28-02-2023 - shreeya  
 		public function getStandardDev($sample_code,$data) {
 
+			
 			$conn = ConnectionManager::get('default');
 		
 			$cnt = count($data);
-			$distance_sum = 0;
+			$distance_sum;
 
 			
 			$mean = array_sum($data)/$cnt;
 		
 				foreach($data as $each) {
 
+					// added if else contn result is string or integer Date - 19-04-2023 - Shreeya
 					if(is_numeric($each)){
 					
 						$distance_sum = $distance_sum+ ($each - $mean) ** 2;
-						
 					}
+					else{
+
+						$std_deviation = $each;
+						
+					}	
 					
 				}	
 			
+				//if result integer
+				if(is_numeric($each)){
+
 					$variance = $distance_sum/$cnt;
 					$std_deviation = sqrt($variance);
+				}
 
 			
 			return $std_deviation;
