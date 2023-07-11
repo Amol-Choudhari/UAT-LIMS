@@ -482,6 +482,7 @@
                 $this->loadModel('DmiChemistRegistrations');
                 $this->loadModel('DmiChemistRoToRalLogs');
                 $this->loadModel('DmiChemistRalToRoLogs');
+                $this->loadModel('DmiChemistProfileDetails');
                
 
                 $customer_id = $this->Session->read('customer_id'); 
@@ -493,10 +494,16 @@
                 // $this->set('ro_fname', $ro_fname);
                 // $this->set('ro_lname', $ro_lname);
                 // $this->set('role', $role);
-
+                
 
                 $pdf_date = date('d-m-Y');  
                 $this->set('pdf_date',$pdf_date);
+                
+                $chemist_profile_picture = $this->DmiChemistProfileDetails->find('all', array('conditions'=>['customer_id IS'=>$customer_id]))->first();
+                if(!empty($chemist_profile_picture)){
+                  $profile_photo = $chemist_profile_picture['profile_photo'];
+                  $this->set('profile_photo', $profile_photo);
+                }
 
                 $chemistdetails = $this->DmiChemistRegistrations->find('all')->where(array('chemist_id IS'=>$customer_id))->first();
                if(!empty($chemistdetails['is_training_completed']) && $chemistdetails['is_training_completed'] == 'no' ){

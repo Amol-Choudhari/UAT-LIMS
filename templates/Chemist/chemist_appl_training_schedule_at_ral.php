@@ -28,7 +28,7 @@
 ?>
 	
     <table width="100%" border="1">
-        <tr><td align="center" style="padding:5px;"><h4>Letter from RO To schedule Training</h4></td></tr>
+        <tr><td align="center" style="padding:5px;"><h4>Letter from RO to RAL schedule Training </h4></td></tr>
     </table>
 
     <table width="100%" border="1">
@@ -52,6 +52,11 @@
                    Regional Agmark Laboratory,<br>
                    <?php echo $ral_office_address; ?> <br> 
             </td>
+            <?php if(!empty($profile_photo)){ ?>
+            <td align="right">
+               <img src="<?php echo $profile_photo; ?>" width="80" height="80" >
+         </td>
+         <?php } ?>
         </tr>
 
         <tr>    
@@ -67,8 +72,7 @@
 			
 			The training charges of Rs. <?php echo $charges; ?> & necessary documents have been submitted in
             Regional office, <?php echo $ro_office;?>. In this connection it is requested to impart necessary
-            training to  <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> for analysis, grading, marketing of <?php echo $sub_commodities_list; ?> to be
-            	graded under Agmark.<br>
+            training to  <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> for analysis, grading, marking  of <?php echo $sub_commodities_list; ?> under Agmark.<br>
            The training has been scheduled from the <?php echo $schedule_from;?> to <?php echo $schedule_to;?>.
 	
 			</td>
@@ -86,7 +90,7 @@
 					
 		<tr>
 			<td>Your’s faithfully<br> 
-				 <?php echo $ro_fname."&nbsp;". $ro_lname ."<br>".$role ;?><br>
+				 <?php echo $ro_fname."&nbsp;". $ro_lname; ?><br>
 				Directorate of Marketing and Inspection<br><?php echo $ro_office;?> <br>
 				RO/SO Office.<br>
 			</td>
@@ -103,7 +107,7 @@
 					
 		<tr>
 			<td>Copy to:<br> 
-			1. <?php echo $firmName; ?>, <?php echo $firm_address; ?> with this instruction to depute your chemist for necessary
+			1. <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> <?php echo $firmName; ?>, <?php echo $firm_address; ?> with this instruction to depute your chemist for necessary
                 training in Regional Agmark Laboratory <?php echo $ral_office; ?>.<br>
 			</td>
 		</tr>
