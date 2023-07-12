@@ -316,6 +316,14 @@
 												<p class="nav-icon-p">RAL to RO List</p>
 											</a>
 										</li>
+
+										<!-- added new menu for chemist approved list in chemist training by laxmi 12-07-2023 -->
+										<li class="nav-item">
+											<a href="<?php echo $this->request->getAttribute("webroot");?>Chemist/approvedChemistList" class="bg-cyan nav-link">
+												<i class="fas fa-list nav-icon"></i>
+												<p class="nav-icon-p">Approved Chemist</p>
+											</a>
+										</li>
 									</li>
 								</ul>
 							</li>

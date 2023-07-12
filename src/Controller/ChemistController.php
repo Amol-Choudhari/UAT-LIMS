@@ -696,5 +696,64 @@
 
                 }
 
+
+                //added new function to display chemist approved list in lims side
+                 public function approvedChemistList(){
+                  $this->viewBuilder()->setLayout('admin_dashboard');
+                  
+                  $this->loadModel('DmiChemistRegistrations');
+                  $this->loadModel('DmiChemistRalToRoLogs');
+                  $this->loadModel('DmiChemistRoToRalLogs');
+                  $this->loadModel('DmiChemistTrainingAtRo');
+                  $this->loadModel('DmiRoOffices');
+
+                  // find all list of application which are the training completed related to chennai
+                  $posted_ral_office = $this->Session->read('posted_ro_office');
+                  $ral_office_training_finish = $this->DmiChemistRalToRoLogs->find('all')->where(['ral_office_id IS'=>$posted_ral_office , 'training_completed IS'=>1])->toArray();
+                  $reliving_letter = array();
+                  foreach ($ral_office_training_finish as $key => $each) {
+                    
+                    // find all chemist training completed at ro
+                    $apprvoed_list[] = $this->DmiChemistTrainingAtRo->find('all')->where(['ro_office_id IS'=>$each['ro_office_id'] , 'training_completed IS'=>1, 'chemist_id IS'=>$each['chemist_id']])->last();
+                   $reliving_letter[] = $each['pdf_file'];
+                  }  
+                  
+                  
+                  // find all granted list
+                  $i = 0;
+                  $ro_office_name = array();
+                  $grant_list = array();
+                  $this->loadModel('DmiChemistGrantCertificatePdfs');
+                  if(!empty($apprvoed_list)){
+                  foreach ($apprvoed_list as $key => $each_g) {
+                     
+                    if(!empty($each_g)){ 
+                     $grant_list[] = $this->DmiChemistGrantCertificatePdfs->find('all')->where(['customer_id IS'=>$each_g['chemist_id']])->first();
+                   
+                    }
+                    }
+                  }
+                 $chemist_fname = array();
+                 $chemist_lname = array();
+                 if(!empty($grant_list)){
+                  foreach($grant_list as $each_l){
+                    $ro_office = $this->DmiRoOffices->find('all', ['valueField'=>['ro_office']])->where(['ro_email_id IS'=>$each_l['user_email_id']])->first();
+                    $ro_office_name [$i] = $ro_office['ro_office'];
+                    $chemist_nameDetails = $this->DmiChemistRegistrations->find('all', ['valueField'=>['chemist_fname', 'chemist_lname']])->where(['chemist_id IS'=>$each_l['customer_id']])->first();
+                    $chemist_fname[$i] = $chemist_nameDetails['chemist_fname'];
+                    $chemist_lname[$i] = $chemist_nameDetails['chemist_lname'];
+                    $i++;
+                    
+                  }
+                 }
+
+
+                 $this->set('ro_office_name',$ro_office_name);
+                 $this->set('grant_list',$grant_list);
+                 $this->set('chemist_lname',$chemist_lname);
+                 $this->set('chemist_fname',$chemist_fname);
+                 
+                }
+
 	}
 ?>
