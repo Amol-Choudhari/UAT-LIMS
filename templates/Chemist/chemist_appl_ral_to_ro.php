@@ -46,13 +46,19 @@
         <tr>
             <td>  
             	
-                   The Asstt. Agriculture Marketing Adviser,<br>
+                   The Incharge,<br>
                    Directorate of Marketing and Inspection,<br>
-                   Regional Office,<br>
+                   <?php echo $office_type; ?> Office,<br>
                    <?php echo $ro_office; ?> <br> 
             </td>
+            <?php if(!empty($profile_photo)) { ?>
+                <td align="right">
+                    <img src="<?php echo $profile_photo ; ?>" width="auto" height="80">
+                </td>
+                <?php } ?>
         </tr>
-
+            </table>
+            <table  width="100%">
         <tr>    
             <td><br>Subject: Training of <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> in the analysis of <?php echo $sub_commodities_list; ?> – reg..
             </td>
@@ -64,7 +70,7 @@
 
         <tr>
             <td>
-               With reference to the Regional Office, O.M. No. [Number] dated [date], regarding training in the analysis of <?php echo $sub_commodities_list; ?> to <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> sponsored chemist of  <?php echo $firm_name; ?> <?php echo $firm_address; ?> has completed his training from <?php echo $schedule_from;?> to <?php echo $schedule_to;?> in the analysis in of <?php echo $sub_commodities_list; ?>.<br>
+               With reference to the <?php echo $office_type; ?>  Office, O.M. No. [Number] dated [date], regarding training in the analysis of <?php echo $sub_commodities_list; ?> to <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> sponsored chemist of  <?php echo $firm_name; ?> <?php echo $firm_address; ?> has completed his training from <?php echo $schedule_from;?> to <?php echo $schedule_to;?> in the analysis in of <?php echo $sub_commodities_list; ?>.<br>
 
                He/she is hereby relieved in on <?php echo $reliving_date;?>.<br>
 			</td>
@@ -83,7 +89,6 @@
 		<tr>
 			<td>Your’s faithfully<br> 
 				<?php echo $ral_fname ."&nbsp;". $ral_lname; ?>,<br>
-				<?php echo $ral_role;?>,<br>
 				Regional Agmark Laboratory,<br> 
                 <?php echo $ral_office; ?><br>
 				RAL Office.<br>

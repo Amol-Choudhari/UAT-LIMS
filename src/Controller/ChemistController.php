@@ -256,10 +256,10 @@
             $chemist_id = $resheduleData['chemist_id'];
             if(!empty($resheduleData['reshedule_from_date']) && !empty($resheduleData['reshedule_to_date'])){
 
-            $from = date('d-m-Y',strtotime(str_replace('/','-',$resheduleData['reshedule_from_date'])));
-			      $to   = date('d-m-Y',strtotime(str_replace('/','-',$resheduleData['reshedule_to_date'])));
+                $from = date('d-m-Y',strtotime(str_replace('/','-',$resheduleData['reshedule_from_date'])));
+			           $to   = date('d-m-Y',strtotime(str_replace('/','-',$resheduleData['reshedule_to_date'])));
 	
-			      if($from < $to){
+			     
                 $this->loadModel('DmiChemistRalToRoLogs');
                 $ral_office_id = $this->Session->read('posted_ro_office');
                 $data = $this->DmiChemistRalToRoLogs->newEntity(array(
@@ -290,11 +290,7 @@
                 $message_theme = "warning";
                 $redirect_to = '../listOfChemistApplRoToRal';
                 }
-              }else{
-                $message ="Always select From date gretter than To Dates!";
-                $message_theme = "warning";
-                $redirect_to = '../forwardApplicationtoRo/'.$id.'';
-              } 
+             
             }else{
             $message ="Please Enter all Field data";
             $message_theme = "warning";
@@ -355,6 +351,7 @@
                 $this->loadModel('DmiChemistRoToRalLogs');
                 $this->loadModel('MCommodityCategory');
                 $this->loadModel('MCommodity');
+                $this->loadModel('DmiChemistProfileDetails');
                 
                 $ralforwardedRo = $this->DmiChemistRalToRoLogs->find('all')->where(array('ral_office_id IS'=>$ral_office_id, 'id IS'=>$id))->first();
                 if(!empty($ralforwardedRo)){
@@ -366,11 +363,20 @@
                 $dateReliving = date('d-m-Y',strtotime(str_replace('/', '.',$ralforwardedRo['created'])));
                 $this->set('reliving_date', $dateReliving);
                 }
-
+               
+                //set profile picture in letter by laxmi on 11-07-2023
+                $chemist_profile_picture = $this->DmiChemistProfileDetails->find('all', array('conditions'=>['customer_id IS'=>$ralforwardedRo['chemist_id']]))->first();
+                if(!empty($chemist_profile_picture)){
+                  $profile_photo = $chemist_profile_picture['profile_photo'];
+                  $this->set('profile_photo', $profile_photo);
+                }
+            
                 //ro-office
-                $ro_officeData = $this->DmiRoOffices->find('all', array('fields'=>'ro_office'))->where(array('id IS'=>$ralforwardedRo['ro_office_id']))->first();
+                $ro_officeData = $this->DmiRoOffices->find('all')->where(array('id IS'=>$ralforwardedRo['ro_office_id']))->first();
+               
                 if(!empty($ro_officeData)){
                    $this->set('ro_office',$ro_officeData['ro_office']);
+                   $this->set('office_type',$ro_officeData['office_type']);
                 }
 
                 //get packer id

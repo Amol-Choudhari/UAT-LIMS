@@ -44,7 +44,7 @@
         </tr>   
     </table>
 
-    <table  width="100%">
+     <table  width="100%">
         <tr>
             <td>  
             	
@@ -54,11 +54,12 @@
             </td>
             <?php if(!empty($profile_photo)){ ?>
             <td align="right">
-               <img src="<?php echo $profile_photo; ?>" width="80" height="80" >
+               <img src="<?php echo $profile_photo; ?>" width="auto" height="80" >
          </td>
          <?php } ?>
         </tr>
-
+     </table> 
+     <table  width="100%">
         <tr>    
             <td><br>Subject: Impart training to <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>, <?php echo $firmName; ?>, <?php echo $firm_address; ?> for analysis of <?php echo $sub_commodities_list; ?> to be graded under Agmark-reg.</td>
         </tr>
