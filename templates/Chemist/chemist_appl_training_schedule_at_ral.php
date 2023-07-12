@@ -71,7 +71,7 @@
             <td>I am to refer to above cited subject & inform that <?php echo $firmName; ?>, <?php echo $firm_address; ?> has sponsored to <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> for training in <?php echo $sub_commodities_list; ?> to be graded under Agmark.<br>
 			
 			The training charges of Rs. <?php echo $charges; ?> & necessary documents have been submitted in
-            Regional office, <?php echo $ro_office;?>. In this connection it is requested to impart necessary
+            <?php echo $office_type; ?> office, <?php echo $ro_office;?>. In this connection it is requested to impart necessary
             training to  <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> for analysis, grading, marking  of <?php echo $sub_commodities_list; ?> under Agmark.<br>
            The training has been scheduled from the <?php echo $schedule_from;?> to <?php echo $schedule_to;?>.
 	

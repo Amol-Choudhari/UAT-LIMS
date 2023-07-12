@@ -499,11 +499,13 @@
                 $pdf_date = date('d-m-Y');  
                 $this->set('pdf_date',$pdf_date);
                 
+                //set profile picture in letter by laxmi on 11-07-2023
                 $chemist_profile_picture = $this->DmiChemistProfileDetails->find('all', array('conditions'=>['customer_id IS'=>$customer_id]))->first();
                 if(!empty($chemist_profile_picture)){
                   $profile_photo = $chemist_profile_picture['profile_photo'];
                   $this->set('profile_photo', $profile_photo);
                 }
+
 
                 $chemistdetails = $this->DmiChemistRegistrations->find('all')->where(array('chemist_id IS'=>$customer_id))->first();
                if(!empty($chemistdetails['is_training_completed']) && $chemistdetails['is_training_completed'] == 'no' ){
@@ -559,6 +561,8 @@
 
                 $ral_officeData = $this->DmiChemistRoToRalLogs->find('all')->where(array('chemist_id IS'=>$customer_id))->first();
                 
+               
+
                 if(!empty($ral_officeData)){
                   
                 $ral_id = $ral_officeData['ral_office_id'];
@@ -571,10 +575,12 @@
 
                 //ro office
                 $ro_office = $this->DmiRoOffices->find('all', ['conditions'=>['id IS'=>$ral_officeData['ro_office_id']]])->first();
-            
+              
                 if(!empty($ro_office)){
                     $this->set('ro_office',$ro_office['ro_office']);
                     $this->set('role','RO/SO');
+                    //added office type by laxmi on 12-07-2023
+                    $this->set('office_type', $ro_office['office_type']);
                 }
                
                 // get reschedule from and to date
