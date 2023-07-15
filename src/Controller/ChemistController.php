@@ -380,7 +380,7 @@
                 }
 
                 //get packer id
-                $packerId = $this->DmiChemistRegistrations->find('all', array('fields'=>'created_by'))->where(array('chemist_id IS'=>$ralforwardedRo['chemist_id']))->first();
+                $packerId = $this->DmiChemistRegistrations->find('all')->where(array('chemist_id IS'=>$ralforwardedRo['chemist_id']))->first();
 
                 if(!empty($packerId['created_by'])){
                   $firmData = $this->DmiFirms->find('all')->where(array('customer_id IS'=>$packerId['created_by']))->first();
@@ -388,9 +388,9 @@
                   	$this->set('firm_name', $firmData['firm_name']);
                   	$this->set('firm_address', $firmData['street_address']);
                      
-
+                    
                     // for multiple commodities select at export added by laxmi On 10-1-23
-                   $sub_commodity_array = explode(',',$firmData['sub_commodity']);
+                   $sub_commodity_array = explode(',',$packerId['sub_commodities']);
                    $i=0;
                    foreach ($sub_commodity_array as $key => $sub_commodity) {
                         
@@ -547,7 +547,8 @@
                 $this->set('state', $state['state_name']);
                 }
                 // for multiple commodities select at export added by laxmi On 10-1-23
-                $sub_commodity_array = explode(',',$firmDetails['sub_commodity']);
+                // fetch  commodities selected  by chemist added by laxmi On 10-1-23
+                $sub_commodity_array = explode(',',$chemistdetails['sub_commodities']);
                 $i=0;
                 foreach ($sub_commodity_array as $key => $sub_commodity) {
 
@@ -736,13 +737,16 @@
                  $chemist_fname = array();
                  $chemist_lname = array();
                  if(!empty($grant_list)){
-                  foreach($grant_list as $each_l){
+                  foreach($grant_list as $each_l){ 
+                    if(!empty($each_l ['user_email_id'])){
                     $ro_office = $this->DmiRoOffices->find('all', ['valueField'=>['ro_office']])->where(['ro_email_id IS'=>$each_l['user_email_id']])->first();
+                
                     $ro_office_name [$i] = $ro_office['ro_office'];
                     $chemist_nameDetails = $this->DmiChemistRegistrations->find('all', ['valueField'=>['chemist_fname', 'chemist_lname']])->where(['chemist_id IS'=>$each_l['customer_id']])->first();
                     $chemist_fname[$i] = $chemist_nameDetails['chemist_fname'];
                     $chemist_lname[$i] = $chemist_nameDetails['chemist_lname'];
                     $i++;
+                   }
                     
                   }
                  }
