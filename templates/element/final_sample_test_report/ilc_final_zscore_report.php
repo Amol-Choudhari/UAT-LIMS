@@ -1,18 +1,21 @@
 
-<h6 style="text-align:centet;font-size:15px;">Final Zscore Result</h6>
+
+<h6 style="text-align:center;font-size:15px;">Final Zscore Result</h6>
 <h6></h6>
 <tr>
     <td><b>S.No.</b></td>											
     <td><b>Name Of Parameter</b></td>
-    
-    <?php
-    foreach($result as $eachoff){ ?>
-        <td>Actual Value</td>
-        <td><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>) Zscore</td>
-    <?php
-    }
-    
-    ?>
+ <!-- change the condtion accoring to ro_office type by shreey on date [14-07-2023] -->
+ <?php foreach ($result as $eachoff) { ?>
+    <?php if ($eachoff['ro_office'] == 'CAL Nagpur' || $eachoff['ro_office'] == 'Nagpur') { ?>
+        <th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $office_type = 'CAL'; ?>) Actual Value</th>
+        <th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $office_type = 'CAL'; ?>) Zscore</th>
+    <?php } else { ?>
+
+        <th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>) Actual Value</th>
+        <th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>) Zscore</th>
+    <?php } ?>
+<?php } ?>
 
 </tr>
 
@@ -30,34 +33,26 @@
             <?php
 
                 $l=0;
-                
-                foreach($smplList as $eachoff){
-                    
-                ?>
-                <?php
-                
-                $num = $zscorearr[$i][$l];
-                //number format in not match display NA
-                if(is_numeric($num)){
-
-                    $format = floor($num * 100)/100;
-                }else{
-                    $format = $num ;
-                }
-                ?>
-                <!-- if value is not numeric show dropdown selected value  Dtae: 20-04-2023-->
+                foreach($smplList as $eachoff){ ?>
+               
+                <!-- if value is not numeric show  selected value  Dtae: 20-04-2023-->
                 <td>
                     <?php echo $org_val[$i][$l]; ?>
                 </td>
                 <td>
                     <?php 
-                    if(is_numeric($format)){
-                        echo $format; 
+                    $num = $zscorearr[$i][$l];
+                  
+                    // Format the number or display "NA" if not numeric
+                    if (is_numeric($num)) {
+                        $format = floor($num * 100) / 100;
+                        echo $format;
+                    } else {
+                        echo $num;
                     }
-                    else{  echo $format; }
                     ?>
                 </td>
-                
+
             <?php $l++;	} ?>
 
 
@@ -65,7 +60,7 @@
                     
     <?php $i++; $j++; } }  ?>
             
-                    
+    
                         
 
 

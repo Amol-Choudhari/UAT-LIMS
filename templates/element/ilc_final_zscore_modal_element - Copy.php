@@ -33,20 +33,14 @@
 							<th scope="col">Sr.No</th>
 							<th scope="col">Test</th>
 							<?php
-							// change the condtion accoring to ro_office type by shreey on date [14-07-2023]
-							foreach ($result as $eachoff) { ?>
-								<?php if ($eachoff['ro_office'] == 'CAL Nagpur' || $eachoff['ro_office'] == 'Nagpur') { ?>
-									<th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $office_type = 'CAL'; ?>) Actual Value</th>
-									<th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $office_type = 'CAL'; ?>) Zscore</th>
-								<?php } else { ?>
-
-									<th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>) Actual Value</th>
-									<th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>) Zscore</th>
-								<?php } ?>
-							<?php } ?>
-
+							foreach($result as $eachoff){ ?>
+							 	<th scope="col">Value</th>
+								<th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>)</th>
+							<?php
+							}
+							
+							?>
 						</tr>
-
 					</thead>
 					<tbody id="save_selected_zscore">
 					<?php		
@@ -79,30 +73,17 @@
 										}
 									?>
 
-									<!-- added condition for if actule value is string show Satisfactory & Un-Satisfactory : 14-07-2023-->
+									<!-- if value is not numeric show dropdown list  Dtae: 16-03-2023-->
 									<td>
-										<?php
-										echo $org_val[$i][$l];
-										$org_opt_val = $org_val[$i][$l];
-										if ($org_opt_val == 'Positive' || $org_opt_val == 'Present') {
-											$org_option = array('Satisfactory');
-										} elseif ($org_opt_val == 'Negative' || $org_opt_val == 'Absent') {
-											$org_option = array('Un-Satisfactory');
-										} else {
-											// Set a default option if none of the above conditions match
-											$org_option = array('N/A');
-										}
-										?>
+										<?php echo $org_val[$i][$l]; ?>
 									</td>
-
 									<td>
 										<?php 
 										if(is_numeric($format)){
 											echo $format; 
 										}else{
-											
-											//echo $this->Form->control('org_val', array('type'=>'select', 'options'=>array('Satisfactory','Un-Satisfactory'), 'value'=>'', 'label'=>false,'class'=>'form-control org_val','required'=>true,));	
-										echo $this->Form->control('org_val', array('type'=>'text', 'value'=>$org_option, 'label'=>false,'class'=>'form-control org_val','required'=>true,));
+
+											echo $this->Form->control('org_val', array('type'=>'select', 'options'=>array('Satisfactory','Un-Satisfactory'), 'value'=>'', 'label'=>false,'class'=>'form-control org_val','required'=>true,));	
 										}
 										?>
 									</td>

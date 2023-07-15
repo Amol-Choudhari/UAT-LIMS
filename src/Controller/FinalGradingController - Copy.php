@@ -3021,8 +3021,8 @@ class FinalGradingController extends AppController
 
 			//in live project it shows undefined lablist so added this line under the condition- Shreeya - Date[03-05- 2023]
 			$this->set('lablist', json_encode($lablist, true));
-			} 
 		} 
+	} 
 
 		//calculation of mean value 
 		//according to zscore formula  on 10-08-2022 by Shreeya
@@ -3079,10 +3079,10 @@ class FinalGradingController extends AppController
 			foreach($smplList as $sample) {
 
 				$finalresult = $this->FinalTestResult->find('all', array('fields' => array('final_result'),'conditions' =>array('test_code IS' => $row1['testname'],'org_sample_code IS'=>$sample['ilc_org_sample_cd'],'display'=>'Y')))->first();
-				
+
 				//added is_numeric func to check value is numeric
 				if(!empty($finalresult && is_numeric($finalresult['final_result']))){
-					
+
 					if(!empty($meanvalue[$i])){
 						//added if result integer date - 19-04-2023
 						if( is_numeric($standard_deviation)){
@@ -3104,20 +3104,16 @@ class FinalGradingController extends AppController
 
 					$org_val[$i][$j] = $finalresult['final_result'];
 					
-					
-				}
-				else{
-
-					$zscore_cal[$j] = $finalZscore['zscore'];
+				}else{
+					//$zscore_cal[$j] = $finalZscore['zscore'];
 					$org_val[$i][$j] = $finalresult['final_result'];
-					 
 				
 				}
 
 				$j++;
 				
 			}
-			
+
 			if(!empty($zscore_cal)){
 
 				$zscorearr[$i] = $zscore_cal;
