@@ -586,9 +586,11 @@ class FinalGradingController extends AppController
 
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>--------<Get Final Result>-------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-	// Inward Officer verify sample final grading please do not change, change let me know mandar
-	public function getfinalResult(){
 
+	//Description : This is the new fuction is created from the above function with changes to show the no grades in ILC Module.
+	//Author : Shreeya Bondre
+	//Date : 15-07-2023
+	public function ilcGetfinalResult(){
 		$this->loadModel('CommGrade');
 		$this->loadModel('MCommodity');
 		$this->loadModel('FinalTestResult');
@@ -764,6 +766,134 @@ class FinalGradingController extends AppController
 		exit;
 
 	}
+
+	//Description : This is the new fuction is created from the above function with changes to show the all grades to the OIC user.
+	//Author : Akash Thakre
+	//Date : 14-07-2023
+
+	public function getfinalResult(){
+		
+
+		$sample_code = trim($_POST['sample_code']);
+		$grd_standrd = trim($_POST['grd_standrd']);
+		$category_code = trim($_POST['category_code']);
+		$commodity_code = trim($_POST['commodity_code']);
+		$conn = ConnectionManager::get('default');
+
+		$test_string = array();
+		$test_string_ext = array();
+
+		$qry = "SELECT t.test_code, t.test_name, a.final_result
+				FROM final_test_result AS a
+				INNER JOIN m_test AS t ON t.test_code=a.test_code
+				WHERE a.display='Y' ";
+
+		if ($_POST['sample_code']) {
+			$qry .= "and a.sample_code='$sample_code' ";
+		}
+
+		$res = $conn->execute($qry);
+		$res = $res->fetchAll('assoc');
+		
+		$test_codes = array();
+
+		foreach ($res as $each) {
+
+			$test_code = $each['test_code'];
+			
+			if (!in_array($test_code, $test_codes)) {
+				$test_string[] = array(
+					'test_code' => $test_code,
+					'test_name' => $each['test_name'],
+					'final_results' => $each['final_result']
+				);
+				$test_codes[] = $test_code;
+			} else {
+				$index = array_search($test_code, $test_codes);
+				$test_string[$index]['final_results'][] = $each['final_result'];
+			}
+		}
+
+		$query = $conn->execute("SELECT DISTINCT(grade.grade_desc), grade.grade_code, test_code, max_grade_value
+								FROM comm_grade AS cg
+								INNER JOIN m_grade_desc AS grade ON grade.grade_code = cg.grade_code
+								WHERE cg.commodity_code = '$commodity_code' AND cg.display = 'Y'");
+
+		$commo_grade = $query->fetchAll('assoc');
+		
+		// Filter out repeated values based on grade_code
+		$uniqueCommGrade = [];
+		$gradeCodes = [];
+
+		foreach ($commo_grade as $grade) {
+			$gradeCode = $grade['grade_code'];
+			if (!in_array($gradeCode, $gradeCodes)) {
+				$uniqueCommGrade[] = $grade;
+				$gradeCodes[] = $gradeCode;
+			}
+		}
+		
+		
+		$this->loadModel('MGradeDesc');
+
+
+		echo "<table class='table' border='1'>
+			<thead class='tablehead'>
+				<tr>
+					<th>S.N</th>
+					<th>Tests</th>
+					<th>Readings</th>";
+
+					// Generate dynamic table headings based on grade_desc values
+					foreach ($gradeCodes as $val) {
+						
+						$label = $this->MGradeDesc->find()->select(['grade_desc'])->where(['grade_code IN' => $val])->first();
+						echo "<th>" . $label['grade_desc'] . "</th>";
+					}
+
+		echo "</tr>
+			</thead>
+			<tbody>";
+				
+		$j = 1;
+
+		foreach ($test_string as $row) {
+
+			$test_code = $row['test_code'];
+			$test_name = $row['test_name'];
+			$final_results = $row['final_results'];
+
+
+			echo "<tr>
+			<td>" . $j . "</td>
+			<td>" . $test_name . "</td>
+			<td>" . $final_results . "</td>";
+
+		
+			foreach ($gradeCodes as $grade_code) {
+				$query = $conn->execute("SELECT max_grade_value,grade_value
+										FROM comm_grade
+										WHERE commodity_code = '$commodity_code' AND grade_code = '$grade_code' AND test_code = '$test_code'");
+
+				$result = $query->fetch('assoc');
+			
+				$max_grade_value = $result ? $result['max_grade_value'] : '';
+				echo "<td>" . ($max_grade_value !== null ? $max_grade_value : ($result['grade_value'] !== null ? $result['grade_value'] : 'N/A')) . "</td>";
+				
+			
+			}
+
+			echo "</tr>";
+
+			$j++;
+		}
+
+		echo "</tbody>
+		</table>";
+
+		exit;
+	}
+	
 
 /***************************************************************************************************************************************************************************************/
 
@@ -3224,7 +3354,7 @@ class FinalGradingController extends AppController
 		// }  		
 		
 		// $calresult = $this->$mymodelname->find('all', array('conditions'=> array('sample_code IS' => $sample['ilc_org_sample_cd'])))->first();
-		// //$smpl_cd = $calresult['sample_code'];
+		//$smpl_cd = $calresult['sample_code'];
 		
 		// if(!empty($calresult) ){
 		if(!empty($zscore_cal) ){

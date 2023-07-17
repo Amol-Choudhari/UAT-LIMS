@@ -243,7 +243,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: 'getfinal_result',
+				url: 'ilc_getfinal_result',
 				data: {sample_code: sample_code,grd_standrd:grd_standrd,category_code:category_code,commodity_code:commodity_code},
 				beforeSend: function (xhr) { // Add this line
 						xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
