@@ -1,8 +1,8 @@
 
 $(document).ready(function(){
 
-   
-    // $("#get_zscore").hide();
+    //uncommented and hide->show by shreeya [04-07-2023]
+     $("#get_zscore").show();
   
     // adde for save selected value and zscore
 	// Date:- 17-03-2023

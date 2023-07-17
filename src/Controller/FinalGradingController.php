@@ -63,8 +63,10 @@ class FinalGradingController extends AppController
 								  INNER JOIN workflow AS w ON ft.org_sample_code = w.org_sample_code
 								  INNER JOIN m_sample_allocate sa ON ft.org_sample_code = sa.org_sample_code
 								  INNER JOIN sample_inward AS si ON ft.org_sample_code = si.org_sample_code
-								  WHERE si.sample_type_code != 9 AND ft.display ='Y' AND si.status_flag ='FR' AND w.stage_smpl_flag IN ('AR','FR') AND w.dst_usr_cd='$user_code'
+								  WHERE si.sample_type_code != 9 AND ft.display ='Y' AND si.status_flag ='FR' AND w.stage_smpl_flag IN ('AR','FR') AND w.dst_usr_cd='$user_code' AND w.stage_smpl_cd NOT IN ('','blank')
 								  GROUP BY ft.sample_code ");
+								// stage_smpl_cd !='' condition added for empty sample code
+								// by shankhpal shende on 19/04/2023
 
 		$final_result_details = $query->fetchAll('assoc');
 
@@ -584,9 +586,11 @@ class FinalGradingController extends AppController
 
 /*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>--------<Get Final Result>-------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 
-	// Inward Officer verify sample final grading please do not change, change let me know mandar
-	public function getfinalResult(){
 
+	//Description : This is the new fuction is created from the above function with changes to show the no grades in ILC Module.
+	//Author : Shreeya Bondre
+	//Date : 15-07-2023
+	public function ilcGetfinalResult(){
 		$this->loadModel('CommGrade');
 		$this->loadModel('MCommodity');
 		$this->loadModel('FinalTestResult');
@@ -762,6 +766,134 @@ class FinalGradingController extends AppController
 		exit;
 
 	}
+
+	//Description : This is the new fuction is created from the above function with changes to show the all grades to the OIC user.
+	//Author : Akash Thakre
+	//Date : 14-07-2023
+
+	public function getfinalResult(){
+		
+
+		$sample_code = trim($_POST['sample_code']);
+		$grd_standrd = trim($_POST['grd_standrd']);
+		$category_code = trim($_POST['category_code']);
+		$commodity_code = trim($_POST['commodity_code']);
+		$conn = ConnectionManager::get('default');
+
+		$test_string = array();
+		$test_string_ext = array();
+
+		$qry = "SELECT t.test_code, t.test_name, a.final_result
+				FROM final_test_result AS a
+				INNER JOIN m_test AS t ON t.test_code=a.test_code
+				WHERE a.display='Y' ";
+
+		if ($_POST['sample_code']) {
+			$qry .= "and a.sample_code='$sample_code' ";
+		}
+
+		$res = $conn->execute($qry);
+		$res = $res->fetchAll('assoc');
+		
+		$test_codes = array();
+
+		foreach ($res as $each) {
+
+			$test_code = $each['test_code'];
+			
+			if (!in_array($test_code, $test_codes)) {
+				$test_string[] = array(
+					'test_code' => $test_code,
+					'test_name' => $each['test_name'],
+					'final_results' => $each['final_result']
+				);
+				$test_codes[] = $test_code;
+			} else {
+				$index = array_search($test_code, $test_codes);
+				$test_string[$index]['final_results'][] = $each['final_result'];
+			}
+		}
+
+		$query = $conn->execute("SELECT DISTINCT(grade.grade_desc), grade.grade_code, test_code, max_grade_value
+								FROM comm_grade AS cg
+								INNER JOIN m_grade_desc AS grade ON grade.grade_code = cg.grade_code
+								WHERE cg.commodity_code = '$commodity_code' AND cg.display = 'Y'");
+
+		$commo_grade = $query->fetchAll('assoc');
+		
+		// Filter out repeated values based on grade_code
+		$uniqueCommGrade = [];
+		$gradeCodes = [];
+
+		foreach ($commo_grade as $grade) {
+			$gradeCode = $grade['grade_code'];
+			if (!in_array($gradeCode, $gradeCodes)) {
+				$uniqueCommGrade[] = $grade;
+				$gradeCodes[] = $gradeCode;
+			}
+		}
+		
+		
+		$this->loadModel('MGradeDesc');
+
+
+		echo "<table class='table' border='1'>
+			<thead class='tablehead'>
+				<tr>
+					<th>S.N</th>
+					<th>Tests</th>
+					<th>Readings</th>";
+
+					// Generate dynamic table headings based on grade_desc values
+					foreach ($gradeCodes as $val) {
+						
+						$label = $this->MGradeDesc->find()->select(['grade_desc'])->where(['grade_code IN' => $val])->first();
+						echo "<th>" . $label['grade_desc'] . "</th>";
+					}
+
+		echo "</tr>
+			</thead>
+			<tbody>";
+				
+		$j = 1;
+
+		foreach ($test_string as $row) {
+
+			$test_code = $row['test_code'];
+			$test_name = $row['test_name'];
+			$final_results = $row['final_results'];
+
+
+			echo "<tr>
+			<td>" . $j . "</td>
+			<td>" . $test_name . "</td>
+			<td>" . $final_results . "</td>";
+
+		
+			foreach ($gradeCodes as $grade_code) {
+				$query = $conn->execute("SELECT max_grade_value,grade_value
+										FROM comm_grade
+										WHERE commodity_code = '$commodity_code' AND grade_code = '$grade_code' AND test_code = '$test_code'");
+
+				$result = $query->fetch('assoc');
+			
+				$max_grade_value = $result ? $result['max_grade_value'] : '';
+				echo "<td>" . ($max_grade_value !== null ? $max_grade_value : ($result['grade_value'] !== null ? $result['grade_value'] : 'N/A')) . "</td>";
+				
+			
+			}
+
+			echo "</tr>";
+
+			$j++;
+		}
+
+		echo "</tbody>
+		</table>";
+
+		exit;
+	}
+	
 
 /***************************************************************************************************************************************************************************************/
 
@@ -1501,7 +1633,7 @@ class FinalGradingController extends AppController
 		$this->set('sampleTypeCode',$sampleTypeCode);
 
 		$checkifmainilc = array();
-		if($sampleTypeCode ==9){
+		if($sampleTypeCode == 9){
 			// to check if this is a main orignal sample came for final report	 Done By Shreeya on 18-11-2022
 			$checkifmainilc = $this->SampleInward->find('all',array('fields'=>'org_sample_code','conditions'=>array('org_sample_code'=>$Sample_code,'entry_type IS NULL')))->first();
 
@@ -2849,8 +2981,7 @@ class FinalGradingController extends AppController
 		$this->set('ilc_sample_reports',$final_reports);
 	}
 
-
-	//outer sample for ilc to  show the list
+	//outer sample for ilc to  show the list ilc finalized samples main sample
 	// create new fun for showing ilc finalized sample done 13/07-2022 by shreeya
 	public function ilcSampleTestReports(){
 
@@ -2903,7 +3034,7 @@ class FinalGradingController extends AppController
 	}
 
 
-	//outer sample
+	//outer sample show the list of sub sample report ande zscore button.
 	// final result submited Zscore & report list 14-07-2022
 	public function ilcAvailableSampleZscore()
 	{
@@ -2922,7 +3053,7 @@ class FinalGradingController extends AppController
 		$this->loadComponent('Ilc');
 
 
-		// $user_flag = $_SESSION['user_flag'];
+		//$user_flag = $_SESSION['user_flag'];
 		$message = '';
 		$message_theme = '';
 		$redirect_to = '';
@@ -2956,8 +3087,11 @@ class FinalGradingController extends AppController
 					 			INNER JOIN workflow AS w ON sm.ilc_org_sample_cd=w.org_sample_code
 					 			INNER JOIN dmi_ro_offices AS ro ON ro.id=w.dst_loc_id
 								INNER JOIN sample_inward AS si ON w.org_sample_code=si.org_sample_code
-					 			WHERE  w.stage_smpl_flag='OF' AND sm.org_sample_code='$sample_code' AND sm.status = 1
+					 			-- added in where condition 'IF' and si.entry_type='sub_sample' in that ilc module show the list of forwarded to lab incharge 
+								--By- Shreeya - Date[03-05-2023]
+								WHERE w.stage_smpl_flag IN ('OF','IF') AND sm.org_sample_code='$sample_code' AND sm.status = 1 AND si.entry_type='sub_sample'
 								ORDER by sm.id ASC");
+								
 		$result = $query1->fetchAll('assoc');
 		$this->set('result',$result);
 
@@ -3010,15 +3144,17 @@ class FinalGradingController extends AppController
 						
 						$lablist[$l] = 'forlab';
 				
-					 $l++;	} 
+					 $l++;	
+					} 
 
-			$i++; $j++; } } 
-			
+			$i++; $j++; 
+
+			//in live project it shows undefined lablist so added this line under the condition- Shreeya - Date[03-05- 2023]
 			$this->set('lablist', json_encode($lablist, true));
-
+			} 
+		} 
 
 		//calculation of mean value 
-
 		//according to zscore formula  on 10-08-2022 by Shreeya
 		$i=0;
 		$meanvalue = array();
@@ -3055,6 +3191,7 @@ class FinalGradingController extends AppController
 
 		// added for fetch saved value of zscore by shreeya on Date : 05-04-2023
 		$finalZscore = $this->IlcFinalZscores->find('all', array('fields' => array('zscore'),'conditions' =>array('org_sample_code IS' => $sample_code,'status IS'=>'1')))->first();
+	
 		//calculation of zscore on 10-08-2022 by Shreeya
 		$i=0;
 		$zscorearr = array();
@@ -3072,17 +3209,17 @@ class FinalGradingController extends AppController
 			foreach($smplList as $sample) {
 
 				$finalresult = $this->FinalTestResult->find('all', array('fields' => array('final_result'),'conditions' =>array('test_code IS' => $row1['testname'],'org_sample_code IS'=>$sample['ilc_org_sample_cd'],'display'=>'Y')))->first();
-
+				
 				//added is_numeric func to check value is numeric
 				if(!empty($finalresult && is_numeric($finalresult['final_result']))){
-
+					
 					if(!empty($meanvalue[$i])){
 						//added if result integer date - 19-04-2023
 						if( is_numeric($standard_deviation)){
 							$zscore_cal[$j] = ($finalresult['final_result'] - $meanvalue[$i])/$standard_deviation;
 							
 						}
-						//further condition 
+						//further condition added on 25-04-2023
 						else{
 
 							$zscore_cal[$j] = $finalZscore['zscore'];
@@ -3090,22 +3227,27 @@ class FinalGradingController extends AppController
 						}
 
 					}else{
+						//further condition added on 25-04-2023
 						$zscore_cal[$j] = $finalZscore['zscore'];
 						
 					}
 
 					$org_val[$i][$j] = $finalresult['final_result'];
 					
-				}else{
+					
+				}
+				else{
+
 					$zscore_cal[$j] = $finalZscore['zscore'];
 					$org_val[$i][$j] = $finalresult['final_result'];
+					 
 				
 				}
 
 				$j++;
 				
 			}
-
+			
 			if(!empty($zscore_cal)){
 
 				$zscorearr[$i] = $zscore_cal;
@@ -3122,95 +3264,100 @@ class FinalGradingController extends AppController
 
 
 		//added to saving zscore result on 11-08-2022 by Shreeya
-		$i=0;
-		$zscorearr = array();
-		$savezscore  = array();
+		// $i=0;
+		// $zscorearr = array();
+		// $savezscore  = array();
 
-		//call to ilc component for calculating the standard deviation
-		// Date: 28-02-2023  By Shreeya
-		$standard_deviation = $this->Ilc->getStandardDev($sample_code,$resltarr[$i]);
-
-		foreach($test as $row1) {
-
-			$j=0;
-			$zscore_cal = array();
-			foreach($smplList as $sample) {
-				
-				$finalresult = $this->FinalTestResult->find('all', array('fields' => array('final_result'),'conditions' =>array('test_code IS' => $row1['testname'],'org_sample_code IS'=>$sample['ilc_org_sample_cd'],'display'=>'Y')))->first();
-				
-				
-				if(!empty($finalresult && is_numeric($finalresult['final_result']))){
-		
-					if(!empty($meanvalue[$i])){
-						//added if result integer date - 19-04-2023
-						if( is_numeric($standard_deviation)){
-							$zscore_cal[$j] = ($finalresult['final_result'] - $meanvalue[$i])/$standard_deviation;
-						}
-						//further condition 
-						else{
-
-							$zscore_cal[$j] = $finalZscore['zscore'];
-						}
-					}
-					else{
-						$zscore_cal[$j] = $finalZscore['zscore'];
-					}
-						
-				}else{
-					$zscore_cal[$j] = $finalZscore['zscore'];
-				}
-				
-				//check in new table if records exist with the sample code and status 1
-				$savedFinalZscore = $this->IlcFinalZscores->find('all', array('fields' => array('zscore'),'conditions' =>array('org_sample_code IS' => $sample_code),'status'=>'1','order'=>'id ASC'))->toArray();
-			
-				//if yes then use new table name as model
-				//else use old table name as model
-				if(!empty($savedFinalZscore)){
-					$mymodelname = 'IlcFinalZscores';
-				}else{
-					$mymodelname = 'IlcCalculateZscores';
-				}
-				$this->loadModel($mymodelname);
-
-				$date = date('Y-m-d H:i:s');
-				//added a line for updated status according to status (0,1) done 05/04/2023 by shreeya
-				//$this->$mymodelname->updateAll(array('status' => 0,'modified'=>"$date"),array('org_sample_code' => $sample_code));
-				
-				$savezscore[] = array(
-
-					'org_sample_code' 	=> $sample_code,
-					'sample_code'     	=> $sample['ilc_org_sample_cd'],
-					'lab_name'		  	=> 'test',
-					'test_code'		  	=> $row1['testname'],
-					'commodity_code'  	=> $getcommodity['commodity_code'],
-					'zscore'			=> $zscore_cal[$j],
-					'created'			=> $date,
-					'modified'			=> $date,
-					'org_val'			=> $org_val[$i][$j],
-					'test_name'			=> $row1['testname'],
-					'status'			=> 1
-				);
-				$j++;
-			}
-
-			if(!empty($zscore_cal)){
-
-				$zscorearr[$i] = $zscore_cal;
-			}
-			$i++;
-		}
-		//creating entities for array
-		$ZscorEntity = $this->$mymodelname->newEntities($savezscore);
-		//saving data in loop
-		foreach($ZscorEntity as $list){	
-
-			$this->$mymodelname->save($list);	
-		}  		
-		
-		$calresult = $this->$mymodelname->find('all', array('conditions'=> array('sample_code IS' => $sample['ilc_org_sample_cd'])))->first();
-		//$smpl_cd = $calresult['sample_code'];
+		// //call to ilc component for calculating the standard deviation
+		// // Date: 28-02-2023  By Shreeya
+		// $standard_deviation = $this->Ilc->getStandardDev($sample_code,$resltarr[$i]);
 	
-		if(!empty($calresult) ){
+		// foreach($test as $row1) {
+
+		// 	$j=0;
+		// 	$zscore_cal = array();
+		// 	foreach($smplList as $sample) {
+				
+		// 		$finalresult = $this->FinalTestResult->find('all', array('fields' => array('final_result'),'conditions' =>array('test_code IS' => $row1['testname'],'org_sample_code IS'=>$sample['ilc_org_sample_cd'],'display'=>'Y')))->first();
+				
+				
+		// 		if(!empty($finalresult && is_numeric($finalresult['final_result']))){
+		
+		// 			if(!empty($meanvalue[$i])){
+		// 				//added if result integer date - 25-04-2023
+		// 				if( is_numeric($standard_deviation)){
+		// 					$zscore_cal[$j] = ($finalresult['final_result'] - $meanvalue[$i])/$standard_deviation;
+		// 				}
+		// 				//further condition 25-04-2023
+		// 				else{
+		// 					//change zscore result finalZscore replace finalresult 
+		// 					//zscore result is display in a  FinalTestResult table
+		// 					//By -  Shreeya- Date[03-05-2023]
+		// 					$zscore_cal[$j] = $finalresult['final_result'];
+		// 				}
+		// 			}
+		// 			else{
+		// 				$zscore_cal[$j] = $finalZscore['zscore']; 
+		// 			}
+						
+		// 		}else{
+		// 			$zscore_cal[$j] = $finalZscore['zscore'];
+		// 		}
+				
+		// 		//check in new table if records exist with the sample code and status 1
+		// 		$savedFinalZscore = $this->IlcFinalZscores->find('all', array('fields' => array('zscore'),'conditions' =>array('org_sample_code IS' => $sample_code),'status'=>'1','order'=>'id ASC'))->toArray();
+			
+		// 		//if yes then use new table name as model
+		// 		//else use old table name as model
+		// 		if(!empty($savedFinalZscore)){
+		// 			$mymodelname = 'IlcFinalZscores';
+		// 		}else{
+		// 			$mymodelname = 'IlcCalculateZscores';
+		// 		}
+		// 		$this->loadModel($mymodelname);
+
+		// 		$date = date('Y-m-d H:i:s');
+		// 		//added a line for updated status according to status (0,1) done 05/04/2023 by shreeya
+		// 		//$this->$mymodelname->updateAll(array('status' => 0,'modified'=>"$date"),array('org_sample_code' => $sample_code));
+				
+		// 		$savezscore[] = array(
+
+		// 			'org_sample_code' 	=> $sample_code,
+		// 			'zscore'			=> $zscore_cal[$j],
+		// 			'created'			=> $date,
+		// 			'modified'			=> $date,
+		// 			'org_val'			=> $org_val[$i][$j],
+		// 			'test_name'			=> $row1['testname'],
+		// 			'status'			=> 1,
+
+		// 			// extra
+		// 			'sample_code'     	=> $sample['ilc_org_sample_cd'],
+		// 			'lab_name'		  	=> 'test',
+		// 			'test_code'		  	=> $row1['testname'],
+		// 			'commodity_code'  	=> $getcommodity['commodity_code']
+		// 		);
+		// 		$j++;
+		// 	}
+
+		// 	if(!empty($zscore_cal)){
+
+		// 		$zscorearr[$i] = $zscore_cal;
+		// 	}
+		// 	$i++;
+		// }
+		// //creating entities for array
+		// $ZscorEntity = $this->$mymodelname->newEntities($savezscore);
+		// //saving data in loop
+		// foreach($ZscorEntity as $list){	
+
+		// 	$this->$mymodelname->save($list);	
+		// }  		
+		
+		// $calresult = $this->$mymodelname->find('all', array('conditions'=> array('sample_code IS' => $sample['ilc_org_sample_cd'])))->first();
+		//$smpl_cd = $calresult['sample_code'];
+		
+		// if(!empty($calresult) ){
+		if(!empty($zscore_cal) ){
 
 			//added to finalized zscore forwarded to oic on 27-07-2022 by shreeya
 			if ($this->request->is('post')) {
@@ -3435,10 +3582,11 @@ class FinalGradingController extends AppController
 
 			}
 
-		}else{
-
-			echo "Sorry.. You don't have  forward to oic";
 		}
+		// else{
+
+		// 	echo "Sorry.. You don't have  forward to oic";
+		// }
 
 			//$message = 'The results have been finalized and forwarded to CAL,Office Incharge';
 			$message_theme = 'success';
@@ -3476,12 +3624,13 @@ class FinalGradingController extends AppController
 		$zscore				 = $_POST['zscore'];
 		$date 		 		 = date('Y-m-d H:i:s');
 			
-		//print_r($org_val);exit;
+	
 		
 		$i=0;
 		$zscoreval = array();
 		$zscorearr = array();
 		foreach($testArr as $row1) {
+			
 			
 
 			$j=0;
@@ -3502,6 +3651,9 @@ class FinalGradingController extends AppController
 						'zscore'				=> $zscore[$i][$j],
 						'created'				=> $date,
 						'modified'				=> $date,
+						'sample_code' 			=> '123', //new feild added for saved zscore  By Sheya - Date[03-05-2023]
+						'test_code'		  		=> '123', //new feild added for saved zscore
+						'lab_name'		  		=> 'test',//new feild added for saved zscore
 						'status'				=>1
 
 				
@@ -3517,6 +3669,7 @@ class FinalGradingController extends AppController
 			
 			$i++;
 		}
+		
 	
 		//creating entities for array
 		$SaveZscor = $this->IlcFinalZscores->newEntities($zscoreval);
@@ -3552,11 +3705,16 @@ class FinalGradingController extends AppController
 				INNER JOIN dmi_ro_offices AS ml ON ml.id=si.loc_id
 				INNER JOIN m_commodity AS mc ON si.commodity_code=mc.commodity_code
 				INNER JOIN workflow AS w ON w.org_sample_code=si.org_sample_code
-				WHERE  w.stage_smpl_flag='FGIO' AND w.stage_smpl_flag!='FG' AND w.stage_smpl_cd NOT IN ('','blank') AND si.sample_type_code=9 AND si.entry_type IS NULL ");
+				WHERE  w.stage_smpl_flag IN('FGIO','VS') AND w.stage_smpl_flag!='FG' 
+				AND w.stage_smpl_cd NOT IN ('','blank') AND si.sample_type_code=9 AND si.entry_type IS NULL 
+				AND si.remark_officeincharg IS NULL AND si.remark_officeincharg_dt IS NULL"); // added the condition remark and remark date [07-07-2023]
 				//w.stage_smpl_cd NOT IN ('','blank') added by shankhpal for empty sample code
 
 		$result = $query2->fetchAll('assoc');
 		$this->set('result',$result);
+
+
+	
 
 	}
 

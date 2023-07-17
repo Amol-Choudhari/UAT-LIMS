@@ -1,51 +1,68 @@
 
-<h6 style="text-align:centet;font-size:12px">Final Zscore Result</h6>
+
+<h6 style="text-align:center;font-size:15px;">Final Zscore Result</h6>
+<h6></h6>
 <tr>
-    <td width="5%"><b>S.No.</b></td>											
-    <td witdh="20%"><b>Name Of Parameter</b></td>
-    
-    <?php
-    foreach($result as $eachoff){ ?>
-        <td witdh="10%">Value</td>
-        <td><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>)</td>
-    <?php
-    }
-    
-    ?>
+    <td><b>S.No.</b></td>											
+    <td><b>Name Of Parameter</b></td>
+ <!-- change the condtion accoring to ro_office type by shreey on date [14-07-2023] -->
+ <?php foreach ($result as $eachoff) { ?>
+    <?php if ($eachoff['ro_office'] == 'CAL Nagpur' || $eachoff['ro_office'] == 'Nagpur') { ?>
+        <th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $office_type = 'CAL'; ?>) Actual Value</th>
+        <th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $office_type = 'CAL'; ?>) Zscore</th>
+    <?php } else { ?>
+
+        <th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>) Actual Value</th>
+        <th scope="col"><?php echo $eachoff['ro_office']; ?> (<?php echo $eachoff['office_type']; ?>) Zscore</th>
+    <?php } ?>
+<?php } ?>
 
 </tr>
-
-<?php		
-
-    if (isset($testarr)) {	
-
-        $j=1;		
-        $i=0;	
-        foreach ($testarr as $eachtest) { ?>
-        
+<?php
+if (isset($testarr)) {
+    $j = 1;
+    $i = 0;
+    foreach ($testarr as $eachtest) {
+        ?>
         <tr>
-            <td><?php echo $j; ?></td>   
+            <td padding: 2px;><?php echo $j; ?></td>
             <td><?php echo $testnames[$i]; ?> </td>
             <?php
-
-                $l=0;
-                foreach($smplList as $eachoff){
+            $l = 0;
+            foreach ($smplList as $eachoff) {
+              
+                $num = $zscorearr[$i][$l];
+               
                 ?>
+                <td>
+                    <?php echo $org_val[$i][$l]; ?>
+                </td>
+                <td>
+                    <?php
+                    // numeric value added if condition further else part is running
+                    if (is_numeric($num)) {
+                        $format = floor($num * 100) / 100;
+                        echo $format;
+                    } else {
+                        echo $num;
+                    }
+                    ?>
+                </td>
                 <?php
-                    $num = (int) $zscorearr[$i][$l];
-                    $format = round($num, 2);
-                ?>
-                <td><?php echo $org_val[$l]; ?> </td>
-                <td><?php echo $format; ?> </td>
-                
-            <?php $l++;	} ?>
-
+                $l++;
+            }
+            ?>
         </tr>
-                    
-                        
-<?php $i++; $j++; } } ?>
+        <?php
+        $i++;
+        $j++;
+    }
+}
+?>
+
+
             
-                    
+    
                         
 
 
