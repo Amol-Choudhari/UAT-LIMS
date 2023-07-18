@@ -445,7 +445,7 @@
 		                $this->Session->write('pdf_file_name',$rearranged_id.'('.$current_pdf_version.')'.'.pdf');
 	    
                       //creating filename and file path to save				
-		                 $file_path = '/writereaddata/LIMS/chemist_training/ral_to_ro_letter/'.$rearranged_id.'('.$current_pdf_version.')'.'.pdf';
+		                 $file_path = '/testdocs/LIMS/chemist_training/ral_to_ro_letter/'.$rearranged_id.'('.$current_pdf_version.')'.'.pdf';
 				               
 		                 $filename = $_SERVER["DOCUMENT_ROOT"].$file_path;
                      //creating filename and file path to save				
