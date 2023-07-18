@@ -206,6 +206,29 @@
 							$("#save").attr("disabled", true);
 						}
 					}
+
+					//to get selected grade by Inward officer and show on OIC screen as default selected
+					//added on 14-06-2023 by Amol
+					var smpl_cd = $("#sample_code").val();
+					$.ajax({
+						type: "POST",
+						url: 'get_iwo_grade',
+						async:false,
+						data: {smpl_cd:smpl_cd},
+						beforeSend: function (xhr) { // Add this line
+								xhr.setRequestHeader('X-CSRF-Token', $('[name="_csrfToken"]').val());
+						},
+						success: function (data) {
+
+							var res = data.match(/#([^']+)#/)[1];//getting data bitween ## from response
+							res = JSON.parse(res);//response is JSOn encoded to parse JSON
+
+							if(res[0]!=null){
+								$("#grade_code").val(res[0]);
+							}
+								
+						}
+					});
 				}
 			});
 		}
@@ -259,6 +282,11 @@
 						}
 					});
 				}
+
+				//added below code to select 'AGMARK' standard from drop down by default.
+				//to show result table and IWO selected grade in grad drop down to OIC.
+				//on 14-06-2023 by Amol
+				$("#grd_standrd").val('2').change();
 			}
 		});
 	}

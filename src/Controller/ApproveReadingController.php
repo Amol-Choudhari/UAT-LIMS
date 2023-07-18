@@ -81,10 +81,10 @@ class ApproveReadingController extends AppController{
 								 INNER JOIN dmi_ro_offices AS ml ON ml.id=si.loc_id
 								 INNER JOIN m_commodity AS mc ON si.commodity_code=mc.commodity_code
 								 INNER JOIN workflow AS w ON w.org_sample_code = si.org_sample_code
-								 WHERE si.status_flag !='junked' AND w.stage_smpl_cd NOT IN ('','blank')  AND w.stage_smpl_cd ".$arr." order by w.stage_smpl_cd desc");
+								 WHERE si.status_flag !='junked' AND w.stage_smpl_cd NOT IN ('','blank')  AND w.stage_smpl_cd ".$arr."  ORDER BY w.stage_smpl_cd, w.modified DESC");
 
 		$result = $query->fetchAll('assoc');
-
+		pr($result); exit;
 		return $result;
 	}
 
