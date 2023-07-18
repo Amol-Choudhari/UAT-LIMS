@@ -255,7 +255,7 @@ class InwardController extends AppController{
 			
 			//get selected commdity from category id
 			$this->loadModel('MCommodity');
-			$commodity_list = $this->MCommodity->find('list',array('keyField'=>'commodity_code','valueField'=>'commodity_name','conditions'=>array('category_code IS'=>$sample_inward_data['category_code'])))->toArray();
+			$commodity_list = $this->MCommodity->find('list',array('keyField'=>'commodity_code','valueField'=>'commodity_name','conditions'=>array('category_code IS'=>$sample_inward_data['category_code']),'order'=>'commodity_name ASC'))->toArray();
 			$district_list = $this->DmiDistricts->find('list',array('valueField'=>array('district_name'),'keyField'=>array('id'),'conditions'=>array('delete_status IS NULL'),'order'=>array('id')))->toArray();
 			
 			if (empty($customer_details)) {

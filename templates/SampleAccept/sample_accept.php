@@ -27,7 +27,7 @@
 										<input type="hidden" id="tran_date" name="tran_date" value="<?php echo date('Y-m-d');?> "/>
 										<input type="hidden" name="user_code" id="user_code"  class="form-control" value="<?php echo $_SESSION["user_code"];?>">
 										<input type="hidden" id="src_loc_id" name="src_loc_id" value=""/>
-										<input type="hidden" id="homCnt" name="homCnt" value=""/>
+										<input type="hidden" id="homCnt" name="homCnt" value="0"/>
 										<select class="dnone" class="form-control" id="category_code"  name="category_code" ></select>
 
 										<div class="col-sm-6">

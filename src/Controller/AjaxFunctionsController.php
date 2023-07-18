@@ -27,7 +27,7 @@ class AjaxFunctionsController extends AppController{
 		$this->autoRender = false;
 		$this->loadModel('MCommodity');
 		$category_id = $_POST['commodity'];
-		$commodities = $this->MCommodity->find('all', array('fields'=>array('commodity_code','commodity_name'), 'conditions'=>array('category_code IS'=>$category_id,'display'=>'Y')))->toArray();
+		$commodities = $this->MCommodity->find('all', array('fields'=>array('commodity_code','commodity_name'), 'conditions'=>array('category_code IS'=>$category_id,'display'=>'Y'),'order'=>'commodity_name ASC'))->toArray();
 		?>
 		<option value=""><?php echo "Select Commodity";?></option>
 		<?php foreach($commodities as $commodity){ ?>

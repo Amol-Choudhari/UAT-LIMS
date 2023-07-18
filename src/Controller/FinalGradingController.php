@@ -3719,5 +3719,23 @@ class FinalGradingController extends AppController
 	}
 
 
+	//added new method to get IWO grades on OIC window, to show default selected
+	//on 14-06-2023 by Amol, called through ajax
+	public function getIwoGrade(){
+
+		$smpl_cd = $_POST['smpl_cd'];
+		//get inward officer grade for this sample
+		$this->loadModel('SampleInward');
+		$this->loadModel('Workflow');
+		//get original sample code
+		$getOrgCode = $this->Workflow->find('all',array('fields'=>array('org_sample_code'),'conditions'=>array('stage_smpl_cd IS'=>$smpl_cd)))->first();
+
+		$getIwoGrades = $this->SampleInward->find('all',array('fields'=>array('inward_grade','sub_grad_check_iwo'),'conditions'=>array('org_sample_code IS'=>$getOrgCode['org_sample_code'])))->first();
+
+		echo '#'.json_encode(array($getIwoGrades['inward_grade'],$getIwoGrades['sub_grad_check_iwo'])).'#';
+		exit;
+	}
+
+
 }
 ?>
