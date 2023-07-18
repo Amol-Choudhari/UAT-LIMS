@@ -164,6 +164,13 @@
 				},
 				success: function (data) {
 
+					//This below line is added to show all grades in the table suggested by AGMARK on 14-07-2023 - Akash [14-07-2023]
+					$("#srch_appl_content").html(data);
+
+					//The below Table is commented to draw the new table with the all grades displayed suggested by AGMARK on 14-07-2023 - Akash [14-07-2023]
+					/*
+
+
 					var resArray = data.match(/#([^']+)#/)[1];//getting data bitween ## from response
 
 					$("#d1 tbody").find('tr').remove();
@@ -216,7 +223,8 @@
 							$.alert(msg);
 							$("#save").attr("disabled", true);
 						}
-					}
+					} */
+
 				}
 			});
 		}

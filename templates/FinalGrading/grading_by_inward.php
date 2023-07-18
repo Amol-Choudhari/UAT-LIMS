@@ -73,6 +73,8 @@
 											<div class="clear"></div>
 
 											<div class="col-md-9 col-md-offset-1 margin_top">
+											<div id="srch_appl_content"></div>
+											<!-- The below Table is commented to draw the new table with the all grades displayed suggested by AGMARK on 14-07-2023 - Akash [14-07-2023]
 												<div class="fsStyle1 dnone" >
 													<table class="table table-striped table-bordered dnone" id="d1">
 														<thead>
@@ -89,7 +91,7 @@
 													</table>
 												</div>
 											</div>
-											
+										-->
 											<div class="clear"></div>
 
 											<div class="col-md-6 margin_top">
