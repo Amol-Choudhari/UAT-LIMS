@@ -22,6 +22,11 @@
 			<td>5. <span style="font-family: krutidev010; font-size:10px;">ijhf{kr uequk bl ç;ksx'kkyk }kjk vkgjhr ugha gS</span> |</td>
 			<td>5. The sample is not drawn by this laboratory.</td>
 		</tr>
-	</table>
 
-	<br><br><br>
+		
+	</table>
+	<!-- add the report no by shreeya on date [14-07-2023] -->
+	<h6 align="right"> Report No  <?php if(isset($test_report)) { echo $test_report[0]['report_no']; } ?> </h6>
+	
+	<br pagebreak="true" />
+	

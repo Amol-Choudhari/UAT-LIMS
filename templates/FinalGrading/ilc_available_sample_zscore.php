@@ -119,7 +119,7 @@
 
 
 <!-- added for get zscore model on 03/08/2022 by shreeya -->
-<?php echo $this->element('ilc_zscore_modal_element');?>
+<!-- <?php// echo $this->element('ilc_zscore_modal_element');?> -->
 <!-- new view for select option when value is not numeric 15-03-2023 -->
 <?php echo $this->element('ilc_final_zscore_modal_element');?>
 
