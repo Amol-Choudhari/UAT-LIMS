@@ -92,6 +92,7 @@
 											// Set a default option if none of the above conditions match
 											$org_option = array('N/A');
 										}
+									
 										?>
 									</td>
 
@@ -100,9 +101,10 @@
 										if(is_numeric($format)){
 											echo $format; 
 										}else{
-											
+											echo implode(', ', $org_option);
+											//echo $this->Form->control('org_val', array('type' => 'select', 'options' => array('Satisfactory' => 'Satisfactory', 'Un-Satisfactory' => 'Un-Satisfactory'), 'default' => $org_option, 'label' => false, 'class' => 'form-control org_val', 'required' => true));
 											//echo $this->Form->control('org_val', array('type'=>'select', 'options'=>array('Satisfactory','Un-Satisfactory'), 'value'=>'', 'label'=>false,'class'=>'form-control org_val','required'=>true,));	
-										echo $this->Form->control('org_val', array('type'=>'text', 'value'=>$org_option, 'label'=>false,'class'=>'form-control org_val','required'=>true,));
+										//echo $this->Form->control('org_val', array('type'=>'text', 'value'=>$org_option, 'label'=>false,'class'=>'form-control org_val','required'=>true,));
 										}
 										?>
 									</td>

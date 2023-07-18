@@ -18,32 +18,28 @@
 <?php } ?>
 
 </tr>
-
-<?php		
-
-    if (isset($testarr)) {	
-
-        $j=1;		
-        $i=0;	
-        foreach ($testarr as $eachtest) { ?>
-        
+<?php
+if (isset($testarr)) {
+    $j = 1;
+    $i = 0;
+    foreach ($testarr as $eachtest) {
+        ?>
         <tr>
-            <td padding: 2px;><?php echo $j; ?></td>   
+            <td padding: 2px;><?php echo $j; ?></td>
             <td><?php echo $testnames[$i]; ?> </td>
             <?php
-
-                $l=0;
-                foreach($smplList as $eachoff){ ?>
+            $l = 0;
+            foreach ($smplList as $eachoff) {
+              
+                $num = $zscorearr[$i][$l];
                
-                <!-- if value is not numeric show  selected value  Dtae: 20-04-2023-->
+                ?>
                 <td>
                     <?php echo $org_val[$i][$l]; ?>
                 </td>
                 <td>
-                    <?php 
-                    $num = $zscorearr[$i][$l];
-                  
-                    // Format the number or display "NA" if not numeric
+                    <?php
+                    // numeric value added if condition further else part is running
                     if (is_numeric($num)) {
                         $format = floor($num * 100) / 100;
                         echo $format;
@@ -52,13 +48,19 @@
                     }
                     ?>
                 </td>
-
-            <?php $l++;	} ?>
-
-
+                <?php
+                $l++;
+            }
+            ?>
         </tr>
-                    
-    <?php $i++; $j++; } }  ?>
+        <?php
+        $i++;
+        $j++;
+    }
+}
+?>
+
+
             
     
                         
