@@ -202,7 +202,8 @@ class AppController extends Controller
 			//end to add bg image on cell
 
 			
-		/************************************************************ */
+			/************************************************************ */
+			//added by shreeya for show report no on each pdf report[18-07-2023]
 			// Get the report number from the array
 			$stored_report = $this->Session->read('report_no');
 			//print_r($stored_report); // Check the structure of the array
@@ -219,7 +220,7 @@ class AppController extends Controller
 					$pdf->setPage($pageno); // Set the current page
 					$pdf->SetFont('times', '', 9);
 					$pdf->SetXY(5, 5); // Set the position of the text
-					$pdf->Cell(0, 5, $footerContent, 0, 0, 'C');
+					$pdf->Cell(0, 5, $footerContent, 0, 0, 'L');
 					
 				}
 				
@@ -253,30 +254,6 @@ class AppController extends Controller
 			// $pdf->Output();
 
 			/************************************************************ */
-
-			
-
-			
-
-		
-			// $pagecount = $pdf->getNumPages();
-			
-			// // Get the report number from the array
-			// $stored_report = $this->Session->read('report_no');
-			
-			// if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
-			// 	$report_no = $stored_report[0]['report_no'];
-
-			// 	$pagecount = $pdf->getNumPages();
-			// 	for ($pageno = 1; $pageno <= $pagecount; $pageno++) {
-			// 		// Add the report number to each page of the PDF
-			// 		$pdf->SetFont('times', '', 12);
-			// 		$pdf->SetXY(10, 10); // Set the position of the text
-			// 		$pdf->Cell(0, 10, 'Report Number: ' . $report_no, 0, 1);
-			// 	}
-			// } 
-			
-
 
 			//sig appearence will only for F mode when save and store file
 			if($mode=='F'){

@@ -80,6 +80,8 @@
 													<div id="error_grade_code1"></div>
 												</div>
 												<div class="col-md-9 col-md-offset-1 margin_top">
+												<div id="srch_appl_content"></div>
+												<!-- The below Table is commented to draw the new table with the all grades displayed suggested by AGMARK on 14-07-2023 - Akash [14-07-2023]
 													<div class="fsStyle1 dnone">
 														<div class="table-responsive"    >
 															<table  class="table dnone" id="d1">
@@ -98,6 +100,7 @@
 															</table>
 														</div>
 													</div>
+												-->
 												</div>
 											</div>
 										</div>

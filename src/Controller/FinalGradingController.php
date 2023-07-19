@@ -2390,15 +2390,8 @@ class FinalGradingController extends AppController
 			$this->set('test_report',$test_report);
 			$this->set('customer_details',$customer_details);
 
-			
+			//added by shreeya for show report no [18-07-2023]
 			$this->Session->write('report_no', $test_report);
-			// $stored_report = $this->Session->read('report_no');
-			// pr($stored_report); 
-			// die;
-
-
-			
-			
 
 			// Call to function for generate pdf file,
 			// change generate pdf file name,
@@ -2414,9 +2407,6 @@ class FinalGradingController extends AppController
 			}
 
 			$this->Session->write('pdf_file_name',$test_report_name);
-
-			
-
 
 			//Send parameter for Sample Test Report to getQrCodeSampleTestReport function
 			// Author : Shankhpal Shende
@@ -3729,6 +3719,24 @@ class FinalGradingController extends AppController
 
 	
 
+	}
+
+
+	//added new method to get IWO grades on OIC window, to show default selected
+	//on 14-06-2023 by Amol, called through ajax
+	public function getIwoGrade(){
+
+		$smpl_cd = $_POST['smpl_cd'];
+		//get inward officer grade for this sample
+		$this->loadModel('SampleInward');
+		$this->loadModel('Workflow');
+		//get original sample code
+		$getOrgCode = $this->Workflow->find('all',array('fields'=>array('org_sample_code'),'conditions'=>array('stage_smpl_cd IS'=>$smpl_cd)))->first();
+
+		$getIwoGrades = $this->SampleInward->find('all',array('fields'=>array('inward_grade','sub_grad_check_iwo'),'conditions'=>array('org_sample_code IS'=>$getOrgCode['org_sample_code'])))->first();
+
+		echo '#'.json_encode(array($getIwoGrades['inward_grade'],$getIwoGrades['sub_grad_check_iwo'])).'#';
+		exit;
 	}
 
 
