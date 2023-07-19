@@ -17,7 +17,7 @@
 
 	<!--added for if else condition for ilc flow when main sample is present work on if contition
 	 other wise else conditon is working for other samples 28-11-2022 by shreeya-->
-	 <?php if($sampleTypeCode ==9 && !empty($checkifmainilc)){ ?>
+	 <?php if(!empty($checkifmainilc)){ ?>
 		<?php echo $this->element('/final_sample_test_report/ilc_final_zscore_report'); ?>
 	<?php }else { ?>
 

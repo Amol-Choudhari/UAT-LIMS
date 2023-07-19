@@ -177,14 +177,16 @@ class AppController extends Controller
 		//create new pdf using tcpdf
 		require_once(ROOT . DS .'vendor' . DS . 'tcpdf' . DS . 'tcpdf.php');
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-			$pdf->SetFooterMargin(5);
+		
+			
+		$pdf->SetFooterMargin(5);
 
 			//to set signature content block in pdf
 			$info = array();
 			$pdf->my_set_sign('', '', '', '', 2, $info);
 
 			$pdf->AddPage();
+		
 
 			$pdf->writeHTML($html, true, false, true, false, '');
 
@@ -198,6 +200,83 @@ class AppController extends Controller
 			// set the starting point for the page content
 			$pdf->setPageMark();
 			//end to add bg image on cell
+
+			
+		/************************************************************ */
+			// Get the report number from the array
+			$stored_report = $this->Session->read('report_no');
+			//print_r($stored_report); // Check the structure of the array
+
+			if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
+				$report_no = $stored_report[0]['report_no'];
+
+				//Define footer content
+				$footerContent = 'Report No: ' . $report_no;
+
+				// Set footer content on all pages
+				for ($pageno = 1; $pageno <= $pdf->getNumPages(); $pageno++) {
+				
+					$pdf->setPage($pageno); // Set the current page
+					$pdf->SetFont('times', '', 9);
+					$pdf->SetXY(5, 5); // Set the position of the text
+					$pdf->Cell(0, 5, $footerContent, 0, 0, 'C');
+					
+				}
+				
+
+			} else {
+				echo 'Report number not found in the array.';
+			}
+
+
+
+			// Get the report number from the array
+			// $stored_report = $this->Session->read('report_no');
+			// print_r($stored_report); // Check the structure of the array
+
+			// if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
+			// 	$report_no = $stored_report[0]['report_no'];
+
+			// 	$pagecount = $pdf->getNumPages();
+			// 	for ($pageno = 1; $pageno <= $pagecount; $pageno++) {
+			// 		// Add the report number to each page of the PDF
+			// 		$pdf->setPage($pageno); // Set the current page
+			// 		$pdf->SetFont('times', '', 12);
+			// 		$pdf->SetXY(10, 10); // Set the position of the text
+			// 		$pdf->Cell(0, 10, 'Report Number: ' . $report_no, 0, 1);
+			// 	}
+			// } else {
+			// 	echo 'Report number not found in the array.';
+			// }
+
+			// // Output the PDF document
+			// $pdf->Output();
+
+			/************************************************************ */
+
+			
+
+			
+
+		
+			// $pagecount = $pdf->getNumPages();
+			
+			// // Get the report number from the array
+			// $stored_report = $this->Session->read('report_no');
+			
+			// if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
+			// 	$report_no = $stored_report[0]['report_no'];
+
+			// 	$pagecount = $pdf->getNumPages();
+			// 	for ($pageno = 1; $pageno <= $pagecount; $pageno++) {
+			// 		// Add the report number to each page of the PDF
+			// 		$pdf->SetFont('times', '', 12);
+			// 		$pdf->SetXY(10, 10); // Set the position of the text
+			// 		$pdf->Cell(0, 10, 'Report Number: ' . $report_no, 0, 1);
+			// 	}
+			// } 
+			
+
 
 			//sig appearence will only for F mode when save and store file
 			if($mode=='F'){

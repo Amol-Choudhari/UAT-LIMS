@@ -2390,6 +2390,16 @@ class FinalGradingController extends AppController
 			$this->set('test_report',$test_report);
 			$this->set('customer_details',$customer_details);
 
+			
+			$this->Session->write('report_no', $test_report);
+			// $stored_report = $this->Session->read('report_no');
+			// pr($stored_report); 
+			// die;
+
+
+			
+			
+
 			// Call to function for generate pdf file,
 			// change generate pdf file name,
 			$current_date = date('d-m-Y');
@@ -2404,6 +2414,9 @@ class FinalGradingController extends AppController
 			}
 
 			$this->Session->write('pdf_file_name',$test_report_name);
+
+			
+
 
 			//Send parameter for Sample Test Report to getQrCodeSampleTestReport function
 			// Author : Shankhpal Shende
