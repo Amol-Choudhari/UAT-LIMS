@@ -141,6 +141,7 @@ class ApproveReadingController extends AppController{
 
 			$this->set('samples_list',array($approve_reading_sample=>$approve_reading_sample));
 			$this->set('stage_sample_code',$approve_reading_sample);//for hidden field, to use common script
+			
 			//get org sample code By Shreeya on Date - 26-04-2023
 			$ogrsample1= $this->Workflow->find('all', array('conditions'=> array('stage_smpl_cd IS' => $approve_reading_sample)))->first();
 			$ogrsample=$ogrsample1['org_sample_code'];
@@ -1056,7 +1057,7 @@ class ApproveReadingController extends AppController{
 								 INNER JOIN m_sample_type AS mst ON mst.sample_type_code = si.sample_type_code
 								 INNER JOIN m_commodity_category AS mcc ON mcc.category_code = si.category_code
 								 INNER JOIN m_commodity AS mc ON mc.commodity_code = si.commodity_code
-								 WHERE si.status_flag!='junked' AND w.src_usr_cd=".$_SESSION['user_code']." AND w.stage_smpl_flag='AR'
+								 WHERE si.status_flag!='junked' AND w.stage_smpl_cd NOT IN ('','blank') AND w.src_usr_cd=".$_SESSION['user_code']." AND w.stage_smpl_flag='AR'
 								 ORDER BY w.tran_date DESC");
 
 		$showapprovedresult = $query ->fetchAll('assoc');

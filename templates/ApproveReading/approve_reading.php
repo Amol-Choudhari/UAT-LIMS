@@ -102,10 +102,15 @@
 														</table>
 													</div>
 
-													<div class="col-md-10 mt-2 dnone"  id="button_id">
+													<div class="col-md-12 mt-2 dnone"  id="button_id">
 														<div class="row">
-															<div class="col-sm-2"><input type='button' name='Final' id='final' class="btn btn-primary"   value='Accept' disabled></div>
-															<div class="col-sm-3"><input type='button' name='Retest' id='re_test' class="btn btn-primary"   value='Re-test' disabled></div>
+															<div class="col-sm-4"><input type='button' name='Final' id='final' class="btn btn-primary"   value='Accept' disabled></div>
+															<div class="col-sm-4"><input type='button' name='Retest' id='re_test' class="btn btn-primary"   value='Re-test' disabled></div>
+															<!-- Added Average butten for duplicate sample By Shreeya on Date - 20-07-2023-->
+															<?php if($duplicateflag =="D") { ?>
+																<div class="col-sm-4"><input type='button' name='Avrage' id='avrage' class="btn btn-primary"   value='Average'></div> 
+															<?php } ?>
+														
 															<?php  if($_SESSION['user_flag']=="CAL"){?>
 																<!--<label class="control-label">Duplicate Analysis</label>
 																<input type="checkbox" name="duplicate_record" id="duplicate_record" value="DF" >-->

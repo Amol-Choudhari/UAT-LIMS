@@ -654,7 +654,7 @@
 								}
 								
 								// below condition chnage for which test parameter allocate to test type and check  duplicate sample  By Shreeya on Date - 26-04-2023
-								if(test_type=='Formula' || test_type=='RT'|| duplicate_flag !='S' || test_type=='SV')
+								if(test_type=='Formula' || test_type=='RT' ||  test_type=='SV' || duplicate_flag !='S')
 								{
 									
 									$("#avrage").attr("disabled", true);
@@ -670,7 +670,7 @@
 							});
 						}
 						//below if condition change for show avrage butten in duplicate sample By Shreeya on Date - 26-04-2023
-						if(test_type=='Formula'||  test_type=='RT'|| test_type=='SV'|| duplicate_flag =='D')
+						if(test_type=='Formula' || test_type=='RT' || test_type=='SV' || duplicate_flag =='D')
 						{
 							for(i=0;i<resultarr.length;i++)
 							{
@@ -796,10 +796,13 @@
 		var d2_r_id=r_id1;
 		for(i=0;i<resultarr.length;i++)
 		{
-			if(testtypearr[i]=='Formula')
+			// calculate result using formula added the test_type  RT & SV
+			// Done By Shreeya on [ Date 09-05-2023 ]
+			if(testtypearr[i]=='Formula' || testtypearr[i]=='SV' || testtypearr[i]=='RT')
 			{
 				$("#avrage").attr("disabled", false);
 				sum_result=parseFloat(sum_result)+parseFloat(resultarr[i]);
+				
 			}
 			else{
 			//CHANGE DISPLAY PROPERTY OF AVRAGE BUTTON FALSE TO TURE, TO SOLVED AVRAGE BUTTON ISSUED. DONE BY PRAVIN BHAKARE ON 24-06-2019.
@@ -807,8 +810,9 @@
 
 				}
 		}
-
-		if(testtypearr[0]=='Formula' )
+		// calculate result using formula added the test_type  RT & SV
+		// Done By Shreeya on [ Date 09-05-2023 ]
+		if(testtypearr[0]=='Formula' || testtypearr[0]=='SV'|| testtypearr[0]=='RT' )
 		{
 			$("#avrage").attr("disabled", false);
 		}
