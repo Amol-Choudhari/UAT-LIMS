@@ -154,9 +154,7 @@ class AppController extends Controller
 					$pdf->SetFont('times', '', 9);
 
 					// Customize footer content based on page number or other conditions
-					if ($pageno === 1) {
-						$footerContent = 'Report No: ' . $report_no;
-					} elseif ($pageno === 2) {
+					if ($pageno === 1 || $pageno === 2) {
 						$footerContent = 'Report No: ' . $report_no;
 					} else {
 						$footerContent = 'Report No: ' . $report_no;
@@ -165,7 +163,10 @@ class AppController extends Controller
 					$pdf->SetXY(5, 5); // Set the position of the text
 					$pdf->Cell(0, 5, $footerContent, 0, 0, 'L');
 				}
-			} 
+			} else {
+				echo 'Report number not found in the array.';
+			}
+
 			/************************************************************ */
 
 			// reset pointer to the last page
