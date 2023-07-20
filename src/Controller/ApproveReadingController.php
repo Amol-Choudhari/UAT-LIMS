@@ -141,6 +141,14 @@ class ApproveReadingController extends AppController{
 
 			$this->set('samples_list',array($approve_reading_sample=>$approve_reading_sample));
 			$this->set('stage_sample_code',$approve_reading_sample);//for hidden field, to use common script
+			//get org sample code By Shreeya on Date - 26-04-2023
+			$ogrsample1= $this->Workflow->find('all', array('conditions'=> array('stage_smpl_cd IS' => $approve_reading_sample)))->first();
+			$ogrsample=$ogrsample1['org_sample_code'];
+
+			//added for get stage sample code and check duplicate flag By Shreeya on Date - 26-04-2023
+			$duplicateflag = $this->SampleInward->find('all',array('fields'=>'result_dupl_flag','conditions'=>array('org_sample_code'=>$ogrsample)))->first();
+			$duplicate_val = $duplicateflag['result_dupl_flag'];
+			$this->set('duplicateflag',trim($duplicate_val));
 
 			if ($this->request->is('post')) {
 
