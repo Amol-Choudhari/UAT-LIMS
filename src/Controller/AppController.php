@@ -140,6 +140,34 @@ class AppController extends Controller
 			$pdf->setPageMark();
 			//end to add bg image on cell
 
+			/************************************************************ */
+			//added by shreeya for show report no on each pdf report[18-07-2023]
+			// Get the report number from the array
+			$stored_report = $this->Session->read('report_no');
+
+			if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
+				$report_no = $stored_report[0]['report_no'];
+
+				// Set footer content on all pages
+				for ($pageno = 1; $pageno <= $pdf->getNumPages(); $pageno++) {
+					$pdf->setPage($pageno); // Set the current page
+					$pdf->SetFont('times', '', 9);
+
+					// Customize footer content based on page number or other conditions
+					if ($pageno === 1) {
+						$footerContent = 'Report No: ' . $report_no;
+					} elseif ($pageno === 2) {
+						$footerContent = 'Report No: ' . $report_no;
+					} else {
+						$footerContent = 'Report No: ' . $report_no;
+					}
+
+					$pdf->SetXY(5, 5); // Set the position of the text
+					$pdf->Cell(0, 5, $footerContent, 0, 0, 'L');
+				}
+			} 
+			/************************************************************ */
+
 			// reset pointer to the last page
 			$pdf->lastPage();
 
@@ -206,8 +234,7 @@ class AppController extends Controller
 			//added by shreeya for show report no on each pdf report[18-07-2023]
 			// Get the report number from the array
 			$stored_report = $this->Session->read('report_no');
-			//print_r($stored_report); // Check the structure of the array
-
+			
 			if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
 				$report_no = $stored_report[0]['report_no'];
 
@@ -225,34 +252,7 @@ class AppController extends Controller
 				}
 				
 
-			} else {
-				echo 'Report number not found in the array.';
-			}
-
-
-
-			// Get the report number from the array
-			// $stored_report = $this->Session->read('report_no');
-			// print_r($stored_report); // Check the structure of the array
-
-			// if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
-			// 	$report_no = $stored_report[0]['report_no'];
-
-			// 	$pagecount = $pdf->getNumPages();
-			// 	for ($pageno = 1; $pageno <= $pagecount; $pageno++) {
-			// 		// Add the report number to each page of the PDF
-			// 		$pdf->setPage($pageno); // Set the current page
-			// 		$pdf->SetFont('times', '', 12);
-			// 		$pdf->SetXY(10, 10); // Set the position of the text
-			// 		$pdf->Cell(0, 10, 'Report Number: ' . $report_no, 0, 1);
-			// 	}
-			// } else {
-			// 	echo 'Report number not found in the array.';
-			// }
-
-			// // Output the PDF document
-			// $pdf->Output();
-
+			} 
 			/************************************************************ */
 
 			//sig appearence will only for F mode when save and store file
