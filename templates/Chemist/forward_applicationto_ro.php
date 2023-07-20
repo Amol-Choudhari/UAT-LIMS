@@ -6,7 +6,7 @@
       <?php if(empty($training_completed) && !empty($reshedule_status)){ ?>
       <p class="fontSize26"><b> Training Completed</b></p>
     <?php }else{ ?>
-      <p class="fontSize26"><b>Reshedule The Training And Confirmed</b></p>
+      <p class="fontSize26"><b>Reschedule The Training And Confirmed</b></p>
     <?php } ?>
        <!-- <hr/> -->
     </div>
@@ -75,7 +75,7 @@
                     <div class="col-md-4">
                     <?php echo $this->Form->control('ro_office', array('type'=>'text', 'id'=>'roOffice', 'escape'=>false, 'value'=>$ro_office, 'placeholder'=>'Enter First Name', 'class'=>'cvOn cvReq cvAlphaNum form-control', 'maxlength'=>255, 'disabled'=>true, 'label'=>false)); ?>
                     <?php }else{ ?>
-                    <label for="field3"><span>Reshedule From Date<span class="required-star">*</span></span></label>
+                    <label for="field3"><span>Reschedule From Date<span class="required-star">*</span></span></label>
                     </div>
                     <div class="col-md-4">
                     <?php echo $this->Form->control('reshedule_from_date',['class' => 'form-control datepicker-here', 'label' => false,'id' => 'sheduleFrom','value'=>$scheduleFrom, 'type' => 'Text']); ?>
@@ -106,7 +106,7 @@
                     </div>
                     <?php }else{ ?>
                       <div class="col-md-2">
-                       <label for="field3"><span>Reshedule To Date<span class="required-star">*</span></span></label>
+                       <label for="field3"><span>Reschedule To Date<span class="required-star">*</span></span></label>
                     </div>
                     <div class="col-md-4">
                     <?php echo $this->Form->control('reshedule_to_date',['class' => 'form-control datepicker-here', 'label' => false,'id' => 'sheduleTo','value'=>$scheduleTo, 'type' => 'Text']); ?>
