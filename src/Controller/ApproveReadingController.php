@@ -74,16 +74,6 @@ class ApproveReadingController extends AppController{
 		$arr .= "'00')";//00 is intensionally given to put last value in string.
 
 		//Updated Below query by Akash 13/07/2021
-		// $query = $conn->execute("SELECT DISTINCT ON (w.stage_smpl_cd) si.inward_id, w.stage_smpl_cd, si.received_date, st.sample_type_desc, mcc.category_name, mc.commodity_name, ml.ro_office, w.modified AS submitted_on
-		// 						 FROM sample_inward AS si
-		// 						 INNER JOIN m_sample_type AS st ON si.sample_type_code=st.sample_type_code
-		// 						 INNER JOIN m_commodity_category AS mcc ON si.category_code=mcc.category_code
-		// 						 INNER JOIN dmi_ro_offices AS ml ON ml.id=si.loc_id
-		// 						 INNER JOIN m_commodity AS mc ON si.commodity_code=mc.commodity_code
-		// 						 INNER JOIN workflow AS w ON w.org_sample_code = si.org_sample_code
-		// 						 WHERE si.status_flag !='junked' AND w.stage_smpl_cd NOT IN ('','blank')  AND w.stage_smpl_cd ".$arr." order by w.stage_smpl_cd desc ");
-
-		// $result = $query->fetchAll('assoc');
 		
 		//Updated Below query for display list sort by date by Shreeya 19/07/2021
 		$query = $conn->execute("SELECT si.inward_id, w.stage_smpl_cd, si.received_date, st.sample_type_desc, mcc.category_name, mc.commodity_name, ml.ro_office, w.modified AS submitted_on
@@ -103,7 +93,7 @@ class ApproveReadingController extends AppController{
                         ORDER BY w.modified DESC");
 
 		$result = $query->fetchAll('assoc');
-
+		pr($result); exit;
 		return $result;
 	}
 

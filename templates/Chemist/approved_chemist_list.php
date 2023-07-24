@@ -32,7 +32,8 @@
                            <?php 
                            $i = 0;
                             if(!empty($grant_list)){
-                            foreach ($grant_list as $key => $glist) {  ?>
+                            foreach ($grant_list as $key => $glist) {  
+                              if(!empty($glist)){ ?>
                             <tr>
                               <td><?php echo $i+1; ?></td>
                               <td><?php echo $glist['customer_id']; ?></td>
@@ -45,7 +46,7 @@
                               <td><a href="<?php echo $glist['pdf_file']; ?>" target= "_blanck">Certificate</a></td>
                             </tr>
                             <?php $i++;
-                             }  } ?>
+                             } } } ?>
                            </tbody>
                         </table>
                         </div>

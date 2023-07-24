@@ -213,6 +213,7 @@
 						}
 					}
 					*/
+          
 					//to get selected grade by Inward officer and show on OIC screen as default selected
 					//added on 14-06-2023 by Amol
 					var smpl_cd = $("#sample_code").val();
