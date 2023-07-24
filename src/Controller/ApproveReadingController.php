@@ -74,14 +74,23 @@ class ApproveReadingController extends AppController{
 		$arr .= "'00')";//00 is intensionally given to put last value in string.
 
 		//Updated Below query by Akash 13/07/2021
-		$query = $conn->execute("SELECT DISTINCT ON (w.stage_smpl_cd) si.inward_id, w.stage_smpl_cd, si.received_date, st.sample_type_desc, mcc.category_name, mc.commodity_name, ml.ro_office, w.modified AS submitted_on
-								 FROM sample_inward AS si
-								 INNER JOIN m_sample_type AS st ON si.sample_type_code=st.sample_type_code
-								 INNER JOIN m_commodity_category AS mcc ON si.category_code=mcc.category_code
-								 INNER JOIN dmi_ro_offices AS ml ON ml.id=si.loc_id
-								 INNER JOIN m_commodity AS mc ON si.commodity_code=mc.commodity_code
-								 INNER JOIN workflow AS w ON w.org_sample_code = si.org_sample_code
-								 WHERE si.status_flag !='junked' AND w.stage_smpl_cd NOT IN ('','blank')  AND w.stage_smpl_cd ".$arr."  ORDER BY w.stage_smpl_cd, w.modified DESC");
+		
+		//Updated Below query for display list sort by date by Shreeya 19/07/2021
+		$query = $conn->execute("SELECT si.inward_id, w.stage_smpl_cd, si.received_date, st.sample_type_desc, mcc.category_name, mc.commodity_name, ml.ro_office, w.modified AS submitted_on
+                        FROM sample_inward AS si
+                        INNER JOIN m_sample_type AS st ON si.sample_type_code=st.sample_type_code
+                        INNER JOIN m_commodity_category AS mcc ON si.category_code=mcc.category_code
+                        INNER JOIN dmi_ro_offices AS ml ON ml.id=si.loc_id
+                        INNER JOIN m_commodity AS mc ON si.commodity_code=mc.commodity_code
+                        INNER JOIN workflow AS w ON w.org_sample_code = si.org_sample_code
+                        INNER JOIN (
+                            SELECT w.stage_smpl_cd, MAX(w.modified) AS max_modified
+                            FROM workflow AS w
+                            WHERE w.stage_smpl_cd NOT IN ('', 'blank')
+                            GROUP BY w.stage_smpl_cd
+                        ) AS sub ON w.stage_smpl_cd = sub.stage_smpl_cd AND w.modified = sub.max_modified
+                        WHERE si.status_flag != 'junked' AND w.stage_smpl_cd ".$arr."
+                        ORDER BY w.modified DESC");
 
 		$result = $query->fetchAll('assoc');
 		pr($result); exit;
@@ -122,6 +131,15 @@ class ApproveReadingController extends AppController{
 
 			$this->set('samples_list',array($approve_reading_sample=>$approve_reading_sample));
 			$this->set('stage_sample_code',$approve_reading_sample);//for hidden field, to use common script
+			
+			//get org sample code By Shreeya on Date - 26-04-2023
+			$ogrsample1= $this->Workflow->find('all', array('conditions'=> array('stage_smpl_cd IS' => $approve_reading_sample)))->first();
+			$ogrsample=$ogrsample1['org_sample_code'];
+
+			//added for get stage sample code and check duplicate flag By Shreeya on Date - 26-04-2023
+			$duplicateflag = $this->SampleInward->find('all',array('fields'=>'result_dupl_flag','conditions'=>array('org_sample_code'=>$ogrsample)))->first();
+			$duplicate_val = $duplicateflag['result_dupl_flag'];
+			$this->set('duplicateflag',trim($duplicate_val));
 
 			if ($this->request->is('post')) {
 
@@ -1029,7 +1047,7 @@ class ApproveReadingController extends AppController{
 								 INNER JOIN m_sample_type AS mst ON mst.sample_type_code = si.sample_type_code
 								 INNER JOIN m_commodity_category AS mcc ON mcc.category_code = si.category_code
 								 INNER JOIN m_commodity AS mc ON mc.commodity_code = si.commodity_code
-								 WHERE si.status_flag!='junked' AND w.src_usr_cd=".$_SESSION['user_code']." AND w.stage_smpl_flag='AR'
+								 WHERE si.status_flag!='junked' AND w.stage_smpl_cd NOT IN ('','blank') AND w.src_usr_cd=".$_SESSION['user_code']." AND w.stage_smpl_flag='AR'
 								 ORDER BY w.tran_date DESC");
 
 		$showapprovedresult = $query ->fetchAll('assoc');

@@ -2390,6 +2390,9 @@ class FinalGradingController extends AppController
 			$this->set('test_report',$test_report);
 			$this->set('customer_details',$customer_details);
 
+			//added by shreeya for show report no [18-07-2023]
+			$this->Session->write('report_no', $test_report);
+
 			// Call to function for generate pdf file,
 			// change generate pdf file name,
 			$current_date = date('d-m-Y');

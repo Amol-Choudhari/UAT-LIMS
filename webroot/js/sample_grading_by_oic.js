@@ -159,6 +159,12 @@
 				},
 				success: function (data) {
 
+					//This below line is added to show all grades in the table suggested by AGMARK on 14-07-2023 - Akash [14-07-2023]
+					$("#srch_appl_content").html(data);
+
+					//The below Table is commented to draw the new table with the all grades displayed suggested by AGMARK on 14-07-2023 - Akash [14-07-2023]
+					/*
+
 					var resArray = data.match(/#([^']+)#/)[1];//getting data bitween ## from response
 
 					$("#d1 tbody").find('tr').remove();
@@ -206,7 +212,8 @@
 							$("#save").attr("disabled", true);
 						}
 					}
-
+					*/
+          
 					//to get selected grade by Inward officer and show on OIC screen as default selected
 					//added on 14-06-2023 by Amol
 					var smpl_cd = $("#sample_code").val();

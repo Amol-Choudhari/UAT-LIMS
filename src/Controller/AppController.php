@@ -140,6 +140,35 @@ class AppController extends Controller
 			$pdf->setPageMark();
 			//end to add bg image on cell
 
+			/************************************************************ */
+			//added by shreeya for show report no on each pdf report[18-07-2023]
+			// Get the report number from the array
+			$stored_report = $this->Session->read('report_no');
+
+			if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
+				$report_no = $stored_report[0]['report_no'];
+
+				// Set footer content on all pages
+				for ($pageno = 1; $pageno <= $pdf->getNumPages(); $pageno++) {
+					$pdf->setPage($pageno); // Set the current page
+					$pdf->SetFont('times', '', 9);
+
+					// Customize footer content based on page number or other conditions
+					if ($pageno === 1 || $pageno === 2) {
+						$footerContent = 'Report No: ' . $report_no;
+					} else {
+						$footerContent = 'Report No: ' . $report_no;
+					}
+
+					$pdf->SetXY(5, 5); // Set the position of the text
+					$pdf->Cell(0, 5, $footerContent, 0, 0, 'L');
+				}
+			} else {
+				echo 'Report number not found in the array.';
+			}
+
+			/************************************************************ */
+
 			// reset pointer to the last page
 			$pdf->lastPage();
 
@@ -177,14 +206,16 @@ class AppController extends Controller
 		//create new pdf using tcpdf
 		require_once(ROOT . DS .'vendor' . DS . 'tcpdf' . DS . 'tcpdf.php');
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-			$pdf->SetFooterMargin(5);
+		
+			
+		$pdf->SetFooterMargin(5);
 
 			//to set signature content block in pdf
 			$info = array();
 			$pdf->my_set_sign('', '', '', '', 2, $info);
 
 			$pdf->AddPage();
+		
 
 			$pdf->writeHTML($html, true, false, true, false, '');
 
@@ -198,6 +229,32 @@ class AppController extends Controller
 			// set the starting point for the page content
 			$pdf->setPageMark();
 			//end to add bg image on cell
+
+			
+			/************************************************************ */
+			//added by shreeya for show report no on each pdf report[18-07-2023]
+			// Get the report number from the array
+			$stored_report = $this->Session->read('report_no');
+			
+			if (!empty($stored_report) && isset($stored_report[0]['report_no'])) {
+				$report_no = $stored_report[0]['report_no'];
+
+				//Define footer content
+				$footerContent = 'Report No: ' . $report_no;
+
+				// Set footer content on all pages
+				for ($pageno = 1; $pageno <= $pdf->getNumPages(); $pageno++) {
+				
+					$pdf->setPage($pageno); // Set the current page
+					$pdf->SetFont('times', '', 9);
+					$pdf->SetXY(5, 5); // Set the position of the text
+					$pdf->Cell(0, 5, $footerContent, 0, 0, 'L');
+					
+				}
+				
+
+			} 
+			/************************************************************ */
 
 			//sig appearence will only for F mode when save and store file
 			if($mode=='F'){

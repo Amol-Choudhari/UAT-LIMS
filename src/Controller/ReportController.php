@@ -4111,6 +4111,10 @@ class ReportController extends AppController
 								$this->set('sample_final_date', $sample_final_date['tran_date']);
 								$this->set('sample_forwarded_office', $sample_forwarded_office);
 								$this->set('test_report', $test_report);
+
+								//added by shreeya for show report no [18-07-2023]
+								$this->Session->write('report_no', $test_report);
+								
 								// Call to function for generate pdf file,
 								// change generate pdf file name,
 								$current_date = date('d-m-Y');
@@ -5030,6 +5034,9 @@ class ReportController extends AppController
 			$this->set('sample_final_date', $sample_final_date['tran_date']);
 			$this->set('sample_forwarded_office', $sample_forwarded_office);
 			$this->set('test_report', $test_report);
+
+			//added by shreeya for show report no [18-07-2023]
+			$this->Session->write('report_no', $test_report);
 
 			// Call to function for generate pdf file, on 01-06-2019 , By Pravin Bhkare
 			// change generate pdf file name, on 13-12-2019 , By Pravin Bhkare

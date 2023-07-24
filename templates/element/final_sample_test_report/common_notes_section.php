@@ -25,8 +25,6 @@
 
 		
 	</table>
-	<!-- add the report no by shreeya on date [14-07-2023] -->
-	<h6 align="right"> Report No  <?php if(isset($test_report)) { echo $test_report[0]['report_no']; } ?> </h6>
 	
 	<br pagebreak="true" />
 	
