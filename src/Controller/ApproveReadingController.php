@@ -93,7 +93,7 @@ class ApproveReadingController extends AppController{
                         ORDER BY w.modified DESC");
 
 		$result = $query->fetchAll('assoc');
-		pr($result); exit;
+	
 		return $result;
 	}
 
