@@ -64,12 +64,20 @@ class AppController extends Controller
 		}
 
     	//Changes done by Shweta Apale 21-10-2021
-	    define('reporticoReport', $_SERVER['DOCUMENT_ROOT']."/UAT-LIMS/vendor/reportico");
+	   /* define('reporticoReport', $_SERVER['DOCUMENT_ROOT']."/UAT-LIMS/vendor/reportico");
 	    define("ForReportsUserName", "dsm");
 		define("ForReportsPassword", "");
 		define("ForReportsConnection", "10.153.72.53");
 		define("ForReportsDatabaseInterfade", "PostgreSQL");
-		define('ForReportsDB','uat');
+		define('ForReportsDB','uat'); */
+
+		// for local added by shreeya[24-07-2023]
+		define('reporticoReport', $_SERVER['DOCUMENT_ROOT']."/UAT-LIMS/vendor/reportico");
+	    define("ForReportsUserName", "postgres");
+		define("ForReportsPassword", "123");
+		define("ForReportsConnection", "10.158.81.78");
+		define("ForReportsDatabaseInterfade", "PostgreSQL");
+		define('ForReportsDB','uat2');
 
 		//below headers are set for "Content-Security-Policy", to allow inline scripts from same origin and report the outer origin scripts calls.
 		//the "Content-Security-Policy" header is commmented from httpd.conf file now and set here.

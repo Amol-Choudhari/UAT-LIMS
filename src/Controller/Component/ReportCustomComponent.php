@@ -7856,7 +7856,7 @@ class ReportCustomComponent extends Component
         $con = ConnectionManager::get('default');
 
         $delete = $con->execute("DELETE FROM temp_reportico_ho_sample_alloted_chemist_testing WHERE user_id = '$user_id'");
-
+        print_r($user); exit;
         $str = "SELECT si.org_sample_code,mc.commodity_name,si.received_date,mst.sample_type_desc,mll.ro_office,r.user_flag,CONCAT(du.f_name,' ',du.l_name,' (',du.role,')') AS chemist_name,msa.alloc_date
                 FROM sample_inward AS si
                 INNER JOIN code_decode AS cd ON cd.org_sample_code=si.org_sample_code

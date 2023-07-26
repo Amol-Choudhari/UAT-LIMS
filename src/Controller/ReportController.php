@@ -1622,6 +1622,7 @@ class ReportController extends AppController
 			}
 
 			if ($role == "Head Office") {
+				
 				$query = ReportCustomComponent::getHoSampleAllotedToChemistForTesting($from_date, $to_date, $posted_ro_office, $lab, $user, $ral_lab_no);
 				if ($query == 1) {
 					$sql = " SELECT  sr_no, chemist_name, received_date, org_sample_code, commodity_name, sample_type_desc, alloc_date, report_date, counts FROM temp_reportico_ho_sample_alloted_chemist_testing WHERE user_id = '$user_id'";
@@ -3747,14 +3748,14 @@ class ReportController extends AppController
 						$commodity = $this->request->getData('Commodity');
 
 						$con = ConnectionManager::get('default');
-
+					
 						$q = $con->execute("SELECT si.org_sample_code,si.report_pdf, si.commodity_code, wf.tran_date, mc.commodity_name,mcc.category_name,mst.sample_type_desc
 						FROM sample_inward si
 						INNER JOIN workflow wf ON si.org_sample_code = wf.org_sample_code
 						INNER JOIN m_commodity mc ON si.commodity_code = mc.commodity_code
 						INNER JOIN m_commodity_category mcc ON mc.category_code = mcc.category_code
 						INNER JOIN m_sample_type mst ON mst.sample_type_code = si.sample_type_code
-						WHERE si.report_pdf IS NOT NULL AND si.org_sample_code = '$sample_code' AND DATE(si.received_date) BETWEEN '$from_date' AND '$to_date' AND si.commodity_code = '$commodity' AND si.loc_id = '$posted_ro_office'
+						WHERE si.report_pdf IS NOT NULL AND si.org_sample_code = '$sample_code' AND DATE(si.received_date) BETWEEN '$from_date' AND '$to_date' AND si.commodity_code = '$commodity' /* AND si.loc_id = '$posted_ro_office'  commented by shreeya [25-07-2023 ]*/
 						GROUP BY si.org_sample_code,si.report_pdf, si.commodity_code, wf.tran_date, mc.commodity_name,mcc.category_name,mst.sample_type_desc");
 						$records = $q->fetchAll('assoc');
 						if (!empty($records)) {
