@@ -13375,6 +13375,7 @@ class ReportCustomComponent extends Component
                     GROUP BY si.stage_sample_code,mc.commodity_name,si.received_date,si.dispatch_date,si.commodity_code,si.remark");
            
             $records = $query->fetchAll('assoc');
+        
             $query->closeCursor();
             if (!empty($records)) {
                 foreach ($records as $record) {
@@ -13386,7 +13387,7 @@ class ReportCustomComponent extends Component
                     $lab_name = $record['lab_name'];
                     $reason = $record['reason'];
                     $sample_count = $record['sample_count'];
-                    $date = date("d/m/Y");
+                   $date = date("d/m/Y");
                     $i = $i + 1;
 
                     $insert = $con->execute("INSERT INTO temp_reportico_admin_time_taken_report (sr_no, user_id, lab_name, commodity_name, received_date, dispatch_date, remark, time_taken, reason, sample_count, report_date) 
@@ -13394,6 +13395,89 @@ class ReportCustomComponent extends Component
                     '$i','$user_id','$lab_name', '$commodity_name','$received_date', '$dispatch_date', '$remark', '$time_taken','$reason','$sample_count','$date')");
 
                     $update = $con->execute("UPDATE temp_reportico_admin_time_taken_report SET counts = (SELECT COUNT(user_id) FROM temp_reportico_admin_time_taken_report WHERE user_id = '$user_id') WHERE user_id = '$user_id'");
+                }
+
+                $record_insert = 1;
+            }
+        }
+
+        if ($record_insert == 1) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    //added new fun for role inward by shreeya on date [27-07-2023]
+    public static function getIoTimeTakenReport($month, $year, $ral_lab_no, $ral_lab_name)
+    {
+        $i = 0;
+        $user_id = $_SESSION['user_code'];
+        $con = ConnectionManager::get('default');
+
+        $delete = $con->execute("DELETE FROM temp_reportico_io_time_taken_report WHERE user_id = '$user_id'");
+
+        $sql = "SELECT sa.commodity_code
+                FROM sample_inward AS si
+                INNER JOIN m_sample_allocate AS sa ON sa.org_sample_code=si.org_sample_code
+                INNER JOIN dmi_users AS u ON u.id=sa.alloc_to_user_code
+                WHERE sa.lab_code='$ral_lab_no' AND EXTRACT(MONTH
+                FROM sa.alloc_date):: INTEGER = '$month'  AND EXTRACT(YEAR
+                FROM sa.alloc_date):: INTEGER = '$year' GROUP BY sa.commodity_code";
+
+        $sql = $con->execute($sql);
+        $recordNames = $sql->fetchAll('assoc');
+        $sql->closeCursor();
+
+        $record_insert = 0;
+        foreach ($recordNames as $recordName) {
+            $commodity_code = $recordName['commodity_code'];
+            $query = $con->execute("SELECT mc.commodity_name,si.received_date,si.dispatch_date,si.remark,si.stage_sample_code,si.dispatch_date:: DATE -si.received_date:: DATE AS time_taken,'NA' AS reason,
+                    (
+                    SELECT COUNT(si.stage_sample_code)
+                    FROM sample_inward AS si
+                    WHERE EXTRACT(MONTH
+                    FROM si.received_date):: INTEGER = '$month' AND EXTRACT(YEAR
+                    FROM si.received_date):: INTEGER = '$year' AND si.commodity_code = $commodity_code
+                    ) AS sample_count,
+                    (
+                    SELECT CONCAT(r.user_flag,', ',o.ro_office) AS ral_lab
+                    FROM dmi_users AS u
+                    INNER JOIN dmi_ro_offices AS o ON u.posted_ro_office=o.id
+                    INNER JOIN dmi_user_roles AS r ON r.user_email_id=u.email AND r.user_flag='$ral_lab_name'
+                    WHERE u.status = 'active' AND o.id = '$ral_lab_no'
+                    GROUP BY ral_lab
+                    ) AS lab_name
+                    FROM sample_inward AS si
+                    INNER JOIN m_commodity AS mc ON mc.commodity_code=si.commodity_code
+                    INNER JOIN dmi_users AS du ON du.id=si.user_code
+                    INNER JOIN user_role AS ur ON ur.role_name=du.role AND EXTRACT(MONTH
+                    FROM si.received_date):: INTEGER = '$month' AND EXTRACT(YEAR
+                    FROM si.received_date):: INTEGER = '$year' AND si.commodity_code = $commodity_code
+                    GROUP BY si.stage_sample_code,mc.commodity_name,si.received_date,si.dispatch_date,si.commodity_code,si.remark");
+           
+            $records = $query->fetchAll('assoc');
+        
+            $query->closeCursor();
+            if (!empty($records)) {
+                foreach ($records as $record) {
+                    $commodity_name = $record['commodity_name'];
+                    $received_date = $record['received_date'];
+                    $dispatch_date = $record['dispatch_date'];
+                    $remark = $record['remark'];
+                    $time_taken = $record['time_taken'];
+                    $lab_name = $record['lab_name'];
+                    $reason = $record['reason'];
+                    $sample_count = $record['sample_count'];
+                    $stage_sample_code = $record['stage_sample_code'];
+                    $date = date("d/m/Y");
+                    $i = $i + 1;
+
+                    $insert = $con->execute("INSERT INTO temp_reportico_io_time_taken_report (sr_no, user_id, lab_name, commodity_name, received_date, dispatch_date, remark, time_taken, reason, sample_count, report_date,stage_sample_code) 
+                    VALUES (
+                    '$i','$user_id','$lab_name', '$commodity_name','$received_date', '$dispatch_date', '$remark', '$time_taken','$reason','$sample_count','$date','$stage_sample_code')");
+
+                    $update = $con->execute("UPDATE temp_reportico_io_time_taken_report SET counts = (SELECT COUNT(user_id) FROM temp_reportico_io_time_taken_report WHERE user_id = '$user_id') WHERE user_id = '$user_id'");
                 }
 
                 $record_insert = 1;

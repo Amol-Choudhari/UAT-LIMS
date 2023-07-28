@@ -3272,11 +3272,12 @@ class MasterController extends AppController {
 		$this->set('reportlebel',$label);
 
 		if ($this->request->is('post')) {
-
+			
 			$modifiedData = 'false';
 			$report_label = htmlentities($this->request->getData("report_label"),ENT_QUOTES);
 			$report_name = htmlentities($this->request->getData("report_name"),ENT_QUOTES);
 
+			
 			if(!isset($report_label) || !is_numeric($report_label)){
 				$modifiedData = 'true';
 				$this->LimsUserActionLogs->saveActionLog('Report Master Add','Failed'); #Action
@@ -3287,9 +3288,9 @@ class MasterController extends AppController {
 			if($modifiedData == 'false'){
 
 				$is_already_present = $this->MReport->find('all',array('fields'=>'report_desc','conditions'=>array('display'=>'Y','trim(lower(report_desc))'=>strtolower(trim($report_name)))))->first();
-				
+			
 				if(empty($is_already_present)){
-
+					
 					$newEntity = $this->MReport->newEntity(array(
 						'report_desc'=>$report_name,
 						'user_code'=>$_SESSION['user_code'],

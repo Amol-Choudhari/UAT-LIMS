@@ -2040,6 +2040,9 @@ class FinalGradingController extends AppController
 		The code is repitition of the logic from above code.
 		on 09-08-2022 by Amol
 		*/
+
+		
+		$str2="";
 		foreach($test_string_ext as $row1) {
 
 			$query = $conn->execute("SELECT DISTINCT(grade.grade_desc),grade.grade_code,test_code
@@ -2048,7 +2051,8 @@ class FinalGradingController extends AppController
 										WHERE cg.commodity_code = '$commodity_code' AND cg.test_code = '$row1' AND cg.display = 'Y'");
 
 			$commo_grade = $query->fetchAll('assoc');
-			$str2="";
+			
+			//$str2=""; this variable commented & add before query by shreeya [27-07-2023]
 
 			$this->set('commo_grade',$commo_grade );
 		}

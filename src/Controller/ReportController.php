@@ -6184,26 +6184,33 @@ class ReportController extends AppController
 
 			$sql = "";
 
-			if ($role == 'DOL') {
-				$query = ReportCustomComponent::getDolTimeTakenReport($month, $year, $ral_lab_no, $ral_lab_name);
+			//added the rore inward by shreeya[27-07-2023]
+			if ($role == 'Inward Officer') {
+				$query = ReportCustomComponent::getIoTimeTakenReport($month, $year, $ral_lab_no, $ral_lab_name);
 				if ($query == 1) {
-					$sql = "SELECT sr_no, lab_name, commodity_name, sample_count, received_date, dispatch_date, time_taken, reason, remark,  report_date, counts FROM temp_reportico_dol_time_taken_report WHERE user_id = '$user_id'";
+					$sql = "SELECT sr_no, lab_name, commodity_name,stage_sample_code, received_date, dispatch_date, time_taken, reason, remark,  report_date, counts FROM temp_reportico_io_time_taken_report WHERE user_id = '$user_id'";
 				}
 			}
+			// if ($role == 'DOL') {
+			// 	$query = ReportCustomComponent::getDolTimeTakenReport($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no, lab_name, commodity_name, sample_count, received_date, dispatch_date, time_taken, reason, remark,  report_date, counts FROM temp_reportico_dol_time_taken_report WHERE user_id = '$user_id'";
+			// 	}
+			// }
 
-			if ($role == 'Head Office') {
-				$query = ReportCustomComponent::getHoTimeTakenReport($month, $year, $ral_lab_no, $ral_lab_name);
-				if ($query == 1) {
-					$sql = "SELECT sr_no, lab_name, commodity_name, sample_count, received_date, dispatch_date, time_taken, reason, remark,  report_date, counts FROM temp_reportico_ho_time_taken_report WHERE user_id = '$user_id'";
-				}
-			}
+			// if ($role == 'Head Office') {
+			// 	$query = ReportCustomComponent::getHoTimeTakenReport($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no, lab_name, commodity_name, sample_count, received_date, dispatch_date, time_taken, reason, remark,  report_date, counts FROM temp_reportico_ho_time_taken_report WHERE user_id = '$user_id'";
+			// 	}
+			// }
 
-			if ($role == 'Admin') {
-				$query = ReportCustomComponent::getAdminTimeTakenReport($month, $year, $ral_lab_no, $ral_lab_name);
-				if ($query == 1) {
-					$sql = "SELECT sr_no, lab_name, commodity_name, sample_count, received_date, dispatch_date, time_taken, reason, remark,  report_date, counts FROM temp_reportico_admin_time_taken_report WHERE user_id = '$user_id'";
-				}
-			}
+			// if ($role == 'Admin') {
+			// 	$query = ReportCustomComponent::getAdminTimeTakenReport($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no, lab_name, commodity_name, sample_count, received_date, dispatch_date, time_taken, reason, remark,  report_date, counts FROM temp_reportico_admin_time_taken_report WHERE user_id = '$user_id'";
+			// 	}
+			// }
 
 			if ($sql == "") {
 				return $this->redirect("/report/index");
@@ -6221,7 +6228,8 @@ class ReportController extends AppController
 				->sql($sql)
 
 				->column("sr_no")->justify("center")->label("Sr. No.")
-				->column("sample_count")->justify("center")->label("Sample Code No.")/* replace heading no of sample -> to sample code no 29-08-2022 by shreeya*/
+				// ->column("sample_count")->justify("center")->label("no of sample.")
+				->column("stage_sample_code")->justify("center")->label("Sample Code No.")/*to sample code no 29-08-2022 by shreeya*/
 				->column("received_date")->justify("center")->label("Dt. of receipt of sample at RAL")
 				->column("dispatch_date")->justify("center")->label("Dt. of Submission of results")
 				->column("time_taken")->justify("center")->label("Time Taken for Ananlysis/Submission")
