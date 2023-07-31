@@ -336,7 +336,7 @@
                }
 
                //forwarded training completed pdf RAL to RO added by laxmi B. on 30-12-2022
-               public function chemistApplRalToRo($id = null){
+               public function chemistApplRalToRo($id = null){ 
                	$this->viewBuilder()->setLayout('pdf_layout');
                 $ral_office_id = $this->Session->read('posted_ro_office');
                 $ral_office    = $this->Session->read('ro_office');
@@ -366,9 +366,13 @@
                
                 //set profile picture in letter by laxmi on 11-07-2023
                 $chemist_profile_picture = $this->DmiChemistProfileDetails->find('all', array('conditions'=>['customer_id IS'=>$ralforwardedRo['chemist_id']]))->first();
+                
                 if(!empty($chemist_profile_picture)){
                   $profile_photo = $chemist_profile_picture['profile_photo'];
                   $this->set('profile_photo', $profile_photo);
+                  $this->set('middle_name_type', $chemist_profile_picture['middle_name_type']);
+                  $this->set('parent_name', $chemist_profile_picture['middle_name']);
+                  $this->set('address', $chemist_profile_picture['address']);
                 }
             
                 //ro-office
@@ -384,10 +388,10 @@
 
                 if(!empty($packerId['created_by'])){
                   $firmData = $this->DmiFirms->find('all')->where(array('customer_id IS'=>$packerId['created_by']))->first();
-                  if(!empty($firmData)){
+                  if(!empty($firmData)){ 
                   	$this->set('firm_name', $firmData['firm_name']);
                   	$this->set('firm_address', $firmData['street_address']);
-                     
+                   
                     
                     // for multiple commodities select at export added by laxmi On 10-1-23
                    $sub_commodity_array = explode(',',$packerId['sub_commodities']);
@@ -404,7 +408,7 @@
 
                     $this->set('commodity_name_list',$commodity_name_list);        
                      $this->set('sub_commodity_data',$sub_commodity_data);
-                  	
+                    ;
                   }
                   
                   $scheduleDates = $this->DmiChemistRalToRoLogs->find('all')->where(array('chemist_id IS'=>$ralforwardedRo['chemist_id']))->last(); 
@@ -457,7 +461,7 @@
 			              array('chemist_id'=>$customer_id));
         
 		                $file_path = $_SERVER["DOCUMENT_ROOT"].$file_path;
-                          
+                       
 		                //to preview application
                     //$this->callTcpdf($all_data_pdf,'I',$customer_id,'chemist',$file_path);//on with preview mode
 		                $this->callTcpdf($all_data_pdf,'F',$customer_id,'chemist',$file_path);//with save mode

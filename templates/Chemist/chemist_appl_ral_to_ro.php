@@ -14,16 +14,21 @@
 </style>
 
 <!-- for multiple commodities added by laxmi on 10-1-2023 -->
-<?php
+<?php  
     $i=0;
-    $sub_commodities_array = array();   
+    $sub_commodities_array = array();  
+    $commodities_cat_array = array();  
     foreach($sub_commodity_data as $sub_commodity){
         
         $sub_commodities_array[$i] = $sub_commodity['commodity_name'];
+        if(!empty($commodity_name_list[$i]['category_name'])){
+        $commodities_cat_array[$i] = $commodity_name_list[$i]['category_name'];
+        }
     $i=$i+1;
     } 
     
     $sub_commodities_list = implode(',',$sub_commodities_array);
+    $commodities_cate_list = implode(',',$commodities_cat_array); 
 ?>
     <table width="100%" border="1">
         <tr><td align="center" style="padding:5px;"><h4>Letter from RAL for Completion of training</h4></td></tr>
@@ -60,7 +65,7 @@
             </table>
             <table  width="100%">
         <tr>    
-            <td><br>Subject: Training of <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> in the analysis of <?php echo $sub_commodities_list; ?> – reg..
+            <td><br>Subject: Training of <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> chemist of <?php echo $firm_name; ?> <?php echo $firm_address; ?> for analysis, grading and marking of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark– reg..
             </td>
         </tr>
                     
@@ -70,9 +75,12 @@
 
         <tr>
             <td>
-               With reference to the <?php echo $office_type; ?>  Office, O.M. No. [Number] dated [date], regarding training in the analysis of <?php echo $sub_commodities_list; ?> to <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> sponsored chemist of  <?php echo $firm_name; ?> <?php echo $firm_address; ?> has completed his training from <?php echo $schedule_from;?> to <?php echo $schedule_to;?> in the analysis in of <?php echo $sub_commodities_list; ?>.<br>
-
-               He/she is hereby relieved in on <?php echo $reliving_date;?>.<br>
+               With reference to the <?php echo $office_type; ?>  Office, O.M. No. [Number] dated [date], regarding providing the training 
+                to <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> <?php echo $middle_name_type; ?> <?php echo $parent_name; ?>  for analysis , grading and marking of <?php echo $commodities_cate_list ;?> (<?php echo $sub_commodities_list ;?>) under  Agmark.
+                In this  regard it is informed that <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> <?php echo $middle_name_type; ?> <?php echo $parent_name; ?> has attended the training for analysis, 
+                grading and marking of <?php echo $commodities_cate_list ;?> (<?php echo $sub_commodities_list ;?>) under Agmark from <?php echo $schedule_from; ?> to <?php echo $schedule_to; ?> at Regional Agmark Laboratory <?php echo $ral_office; ?> . 
+                <br>
+               He/she is hereby relieved in on <?php echo $reliving_date;?> to report  <?php echo $office_type; ?>  <?php echo $ro_office; ?> for further procedural training. <br>
 			</td>
         </tr>
                     
@@ -89,20 +97,27 @@
 		<tr>
 			<td>Your’s faithfully<br> 
 				<?php echo $ral_fname ."&nbsp;". $ral_lname; ?>,<br>
+                Incharge,<br>
 				Regional Agmark Laboratory,<br> 
                 <?php echo $ral_office; ?><br>
-				RAL Office.<br>
 			</td>
 		</tr>
 		<tr>
             <td><br></td>
         </tr>
-	</table>
+	</table><br>
+    <table>
+    <tr>
+        <td>Copy to: <br>
+         1.  <?php echo $chemist_fname."&nbsp;".$chemist_lname;?> <?php echo $middle_name_type; ?> <?php echo $parent_name; ?> <?php echo $address; ?> to report at RO/SO <?php echo $ro_office; ?> for procedural training under AGMARK.
+        </td>
+    </tr>
+    
+     </table>
 
-
-	<br>
 
 	
+
 
 
     
