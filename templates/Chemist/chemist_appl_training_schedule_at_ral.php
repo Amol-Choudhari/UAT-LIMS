@@ -17,14 +17,19 @@
 <!-- for multiple commodities added by laxmi on 10-1-2023 -->
 <?php
     $i=0;
-    $sub_commodities_array = array();   
-    foreach($sub_commodity_data as $sub_commodity){
+    $sub_commodities_array = array(); 
+    $commodity_cat_array = array();  
+    foreach($sub_commodity_data as $sub_commodity){ 
         
         $sub_commodities_array[$i] = $sub_commodity['commodity_name'];
+        if(!empty($commodity_name_list[$i]['category_name'])){
+        $commodity_cat_array[$i]  = $commodity_name_list[$i]['category_name'];
+        }
     $i=$i+1;
     } 
     
     $sub_commodities_list = implode(',',$sub_commodities_array);
+    $commodities_cate_list = implode(',',$commodity_cat_array);
 ?>
 	
     <table width="100%" border="1">
@@ -61,7 +66,7 @@
      </table> 
      <table  width="100%">
         <tr>    
-            <td><br>Subject: Impart training to <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>, <?php echo $firmName; ?>, <?php echo $firm_address; ?> for analysis of <?php echo $sub_commodities_list; ?> to be graded under Agmark-reg.</td>
+            <td><br>Subject: Impart training of <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>, <?php echo $firmName; ?>, <?php echo $firm_address; ?> for analysis, grading and marking of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark-reg.</td>
         </tr>
                     
         <tr>
@@ -69,11 +74,12 @@
         </tr>   
 
         <tr>
-            <td>I am to refer to above cited subject & inform that <?php echo $firmName; ?>, <?php echo $firm_address; ?> has sponsored to <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> for training in <?php echo $sub_commodities_list; ?> to be graded under Agmark.<br>
+            <td>With reference to above cited subject, it is to inform that <?php echo $firmName; ?>, <?php echo $firm_address; ?> has sponsored his chemist <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>  <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> 
+            for training for analysis, grading & marking of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark.<br>
 			
 			The training charges of Rs. <?php echo $charges; ?> & necessary documents have been submitted in
-            <?php echo $office_type; ?> office, <?php echo $ro_office;?>. In this connection it is requested to impart necessary
-            training to  <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> for analysis, grading, marking  of <?php echo $sub_commodities_list; ?> under Agmark.<br>
+            <?php echo $office_type; ?> office, <?php echo $ro_office;?>. In this connection it is requested to provide training to  
+             <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>  <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> for analysis, grading & marking  of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark.<br>
            The training has been scheduled from the <?php echo $schedule_from;?> to <?php echo $schedule_to;?>.
 	
 			</td>
@@ -92,8 +98,9 @@
 		<tr>
 			<td>Your’s faithfully<br> 
 				 <?php echo $ro_fname."&nbsp;". $ro_lname; ?><br>
-				Directorate of Marketing and Inspection<br><?php echo $ro_office;?> <br>
-				RO/SO Office.<br>
+                 Incharge, RO/SO Office.<br>
+				Directorate of Marketing and Inspection<br>
+                <?php echo $ro_office;?> <br>
 			</td>
 		</tr>
 		<tr>
@@ -108,8 +115,10 @@
 					
 		<tr>
 			<td>Copy to:<br> 
-			1. <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> <?php echo $firmName; ?>, <?php echo $firm_address; ?> with this instruction to depute your chemist for necessary
+			 
+            1.<?php echo $firmName; ?>, <?php echo $firm_address; ?> with this instruction to depute your chemist for necessary
                 training in Regional Agmark Laboratory <?php echo $ral_office; ?>.<br>
+            2.<?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> <?php echo $address; ?> to impart the training.
 			</td>
 		</tr>
 		<tr>
@@ -123,8 +132,9 @@
 		<tr>
 			<td>
 				 <?php echo $ro_fname."&nbsp;". $ro_lname ."<br>".$role ;?><br>
+                 Incharge, RO/SO Office<br>
 				Directorate of Marketing and Inspection<br> 
-				RO/SO Office.<br>
+                <?php echo $ro_office;?> <br>
 			</td>
 		</tr>
 		<tr>
@@ -132,7 +142,7 @@
         </tr>
 	</table>
 
-
+  
     
 	
 	
