@@ -1131,7 +1131,9 @@ class SampleForwardController extends AppController {
 									INNER JOIN m_commodity AS mc ON si.commodity_code=mc.commodity_code
 									INNER JOIN workflow AS w ON si.org_sample_code=w.org_sample_code 
 									WHERE si.status_flag !='junked' AND w.stage_smpl_cd NOT IN ('','blank') AND si.stage_sample_code IN ('$cus_string')
-									ORDER BY si.received_date DESC");
+									GROUP BY si.inward_id,si.org_sample_code,si.received_date,st.sample_type_desc,mcc.category_name,mc.commodity_name,ml.ro_office
+			                    	ORDER BY si.received_date DESC");
+									//added group by for repeated sample code not showing [by shreeya on date - 31-07-2023]
 									// stage_smpl_cd != '' as per change req on 19/04/2023
 									//status_flag added by shankhpal shende  
 

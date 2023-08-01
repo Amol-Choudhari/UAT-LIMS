@@ -4274,7 +4274,7 @@ class ReportController extends AppController
 			$commodity = $this->request->getData('Commodity');
 			$user_id = $_SESSION['user_code'];
 
-			$report_name = "Commodity-wise Check & Challenged Samples Analysed during Financial Year 2016-2017";
+			$report_name = "Commodity-wise Check & Challenged Samples Analysed";
 
 			$header1 = "भारत सरकार/Goverment of India";
 			$header2 = "कृषि और किसान कल्याण मंत्रालय /Ministry of Agriculture & Farmers Welfare";
@@ -4482,9 +4482,9 @@ class ReportController extends AppController
 
 		if ($this->request->is('post')) {
 			$from_date = DateTime::createFromFormat('d/m/Y', $this->request->getData('from_date'));
-			$from_date = $from_date->format('Y/m/d');
+			$from_date = $from_date->format('d/m/Y'); /*change date format by shreeya */
 			$to_date = DateTime::createFromFormat('d/m/Y', $this->request->getData('to_date'));
-			$to_date = $to_date->format('Y/m/d');
+			$to_date = $to_date->format('d/m/Y');
 			$lab = $this->request->getData('lab');
 			$ral_lab = $this->request->getData('ral_lab');
 			$posted_ro_office = $this->request->getData('posted_ro_office');
@@ -4501,99 +4501,100 @@ class ReportController extends AppController
 
 			$headerone = $header1 . '<br>' . $header2 . '<br>' . $header3 . '<br>' . $header4;
 
-			if ($role == 'RAL/CAL OIC') {
-				if ($office_type == 'RAL') {
-					$query = ReportCustomComponent::getRalCalOicAllStaticsCounts($from_date, $to_date, $commodity, $office_type);
-					$sql = "SELECT ofsc_name, inward, forward, forward_to_test, internal, external, commodity_name FROM temp_reportico_ral_cal_oic_all_office_statistic WHERE user_id ='$user_id'  ORDER BY ofsc_name";
-					ini_set("include_path", reporticoReport);
-					require_once("vendor/autoload.php");
-					require_once("vendor/reportico-web/reportico/src/Reportico.php");
+			// if ($role == 'RAL/CAL OIC') {
+			// 	if ($office_type == 'RAL') {
+			// 		$query = ReportCustomComponent::getRalCalOicAllStaticsCounts($from_date, $to_date, $commodity, $office_type);
+			// 		$sql = "SELECT ofsc_name, inward, forward, forward_to_test, internal, external, commodity_name FROM temp_reportico_ral_cal_oic_all_office_statistic WHERE user_id ='$user_id'  ORDER BY ofsc_name";
+			// 		ini_set("include_path", reporticoReport);
+			// 		require_once("vendor/autoload.php");
+			// 		require_once("vendor/reportico-web/reportico/src/Reportico.php");
 
-					Builder::build()
-						->properties(["bootstrap_preloaded" => true])
-						->datasource()->database("pgsql:host=" . ForReportsConnection . "; dbname=" . ForReportsDB)->user(ForReportsUserName)->password(ForReportsPassword)
-						->title($report_name)
+			// 		Builder::build()
+			// 			->properties(["bootstrap_preloaded" => true])
+			// 			->datasource()->database("pgsql:host=" . ForReportsConnection . "; dbname=" . ForReportsDB)->user(ForReportsUserName)->password(ForReportsPassword)
+			// 			->title($report_name)
 
-						->sql($sql)
+			// 			->sql($sql)
 
-						->column("ofsc_name")->justify("center")->label("RAL/CAL")
-						->column("inward")->justify("center")->label("Sample Accepted by Inward Officer")
-						->column("forward")->justify("center")->label("Forwarded by RAL/CAL to Other RAL/CAL")
-						->column("forward_to_test")->justify("center")->label("With Chemist for Test")
-						->column("internal")->justify("center")->label("Finalized by Incharge(Internal Sample)")
-						->column("external")->justify("center")->label("Finalized by Incharge(RO/SO Sample)")
+			// 			->column("ofsc_name")->justify("center")->label("RAL/CAL")
+			// 			->column("inward")->justify("center")->label("Sample Accepted by Inward Officer")
+			// 			->column("forward")->justify("center")->label("Forwarded by RAL/CAL to Other RAL/CAL")
+			// 			->column("forward_to_test")->justify("center")->label("With Chemist for Test")
+			// 			->column("internal")->justify("center")->label("Finalized by Incharge(Internal Sample)")
+			// 			->column("external")->justify("center")->label("Finalized by Incharge(RO/SO Sample)")
 
-						// ->to('CSV') //Auto download excel file	
+			// 			// ->to('CSV') //Auto download excel file	
 
-						->expression("total1")->sum("inward", "commodity_name")
-						->expression("total2")->sum("forward", "commodity_name")
-						->expression("total3")->sum("forward_to_test", "commodity_name")
-						->expression("total4")->sum("internal", "commodity_name")
-						->expression("total5")->sum("external", "commodity_name")
+			// 			->expression("total1")->sum("inward", "commodity_name")
+			// 			->expression("total2")->sum("forward", "commodity_name")
+			// 			->expression("total3")->sum("forward_to_test", "commodity_name")
+			// 			->expression("total4")->sum("internal", "commodity_name")
+			// 			->expression("total5")->sum("external", "commodity_name")
 
-						->group("commodity_name")
-						->header("commodity_name")
-						->customHeader("During the Period From $from_date To $to_date ", "")
-						->trailer("total1")->below("inward")->label("Total : ")
-						->trailer("total2")->below("forward")->label("Total : ")
-						->trailer("total3")->below("forward_to_test")->label("Total : ")
-						->trailer("total4")->below("internal")->label("Total : ")
-						->trailer("total5")->below("external")->label("Total : ")
+			// 			->group("commodity_name")
+			// 			->header("commodity_name")
+			// 			->customHeader("During the Period From $from_date To $to_date ", "")
+			// 			->trailer("total1")->below("inward")->label("Total : ")
+			// 			->trailer("total2")->below("forward")->label("Total : ")
+			// 			->trailer("total3")->below("forward_to_test")->label("Total : ")
+			// 			->trailer("total4")->below("internal")->label("Total : ")
+			// 			->trailer("total5")->below("external")->label("Total : ")
 
-						->page()
-						->pagetitledisplay("TopOfFirstPage")
+			// 			->page()
+			// 			->pagetitledisplay("TopOfFirstPage")
 
-						->header($headerone, "")
+			// 			->header($headerone, "")
 
-						->footer("Page: {PAGE} of {PAGETOTAL} & Time: date('Y-m-d H:i:s')", "")
-						->execute();
-				}
+			// 			->footer("Page: {PAGE} of {PAGETOTAL} & Time: date('Y-m-d H:i:s')", "")
+			// 			->execute();
+			// 	}
 
 
-				if ($office_type == 'RO') {
-					$query = ReportCustomComponent::getRalCalOicAllStaticsCounts($from_date, $to_date, $commodity, $office_type);
-					$sql = "SELECT ofsc_name, pending, forward, result, commodity_name FROM temp_reportico_ral_cal_oic_ro_all_office_statistic WHERE user_id ='$user_id' ORDER BY ofsc_name";
+			// 	if ($office_type == 'RO') {
+			// 		$query = ReportCustomComponent::getRalCalOicAllStaticsCounts($from_date, $to_date, $commodity, $office_type);
+			// 		$sql = "SELECT ofsc_name, pending, forward, result, commodity_name FROM temp_reportico_ral_cal_oic_ro_all_office_statistic WHERE user_id ='$user_id' ORDER BY ofsc_name";
 
-					ini_set("include_path", reporticoReport);
-					require_once("vendor/autoload.php");
-					require_once("vendor/reportico-web/reportico/src/Reportico.php");
+			// 		ini_set("include_path", reporticoReport);
+			// 		require_once("vendor/autoload.php");
+			// 		require_once("vendor/reportico-web/reportico/src/Reportico.php");
 
-					Builder::build()
-						->properties(["bootstrap_preloaded" => true])
-						->datasource()->database("pgsql:host=" . ForReportsConnection . "; dbname=" . ForReportsDB)->user(ForReportsUserName)->password(ForReportsPassword)
-						->title("Overall Statistical Counts(RO/SO)")
+			// 		Builder::build()
+			// 			->properties(["bootstrap_preloaded" => true])
+			// 			->datasource()->database("pgsql:host=" . ForReportsConnection . "; dbname=" . ForReportsDB)->user(ForReportsUserName)->password(ForReportsPassword)
+			// 			->title("Overall Statistical Counts(RO/SO)")
 
-						->sql($sql)
+			// 			->sql($sql)
 
-						->column("ofsc_name")->justify("center")->label("RO/SO")
-						->column("pending")->justify("center")->label("Pending for Forwarding")
-						->column("forward")->justify("center")->label("Forwarded to RAL/CAL")
-						->column("result")->justify("center")->label("Result Received")
+			// 			->column("ofsc_name")->justify("center")->label("RO/SO")
+			// 			->column("pending")->justify("center")->label("Pending for Forwarding")
+			// 			->column("forward")->justify("center")->label("Forwarded to RAL/CAL")
+			// 			->column("result")->justify("center")->label("Result Received")
 
-						// ->to('CSV') //Auto download excel file	
+			// 			// ->to('CSV') //Auto download excel file	
 
-						->expression("total1")->sum("pending", "commodity_name")
-						->expression("total2")->sum("forward", "commodity_name")
-						->expression("total3")->sum("result", "commodity_name")
+			// 			->expression("total1")->sum("pending", "commodity_name")
+			// 			->expression("total2")->sum("forward", "commodity_name")
+			// 			->expression("total3")->sum("result", "commodity_name")
 
-						->group("commodity_name")
-						->header("commodity_name")
-						->customHeader("During the Period From $from_date To $to_date ", "")
-						->trailer("total1")->below("pending")->label("Total : ")
-						->trailer("total2")->below("forward")->label("Total : ")
-						->trailer("total3")->below("result")->label("Total : ")
+			// 			->group("commodity_name")
+			// 			->header("commodity_name")
+			// 			->customHeader("During the Period From $from_date To $to_date ", "")
+			// 			->trailer("total1")->below("pending")->label("Total : ")
+			// 			->trailer("total2")->below("forward")->label("Total : ")
+			// 			->trailer("total3")->below("result")->label("Total : ")
 
-						->page()
-						->pagetitledisplay("TopOfFirstPage")
+			// 			->page()
+			// 			->pagetitledisplay("TopOfFirstPage")
 
-						->header($headerone, "")
+			// 			->header($headerone, "")
 
-						->footer("Page: {PAGE} of {PAGETOTAL} & Time: date('Y-m-d H:i:s')", "")
-						->execute();
-				}
-			}
+			// 			->footer("Page: {PAGE} of {PAGETOTAL} & Time: date('Y-m-d H:i:s')", "")
+			// 			->execute();
+			// 	}
+			// }
 
-			if ($role == 'Head Office') {
+			//selec RAL/CAL or RO/SO
+			if ($role == 'Head Office' || $role == 'RAL/CAL OIC') {
 				if ($office_type == 'RAL') {
 					$query = ReportCustomComponent::getHoAllStaticsCounts($from_date, $to_date, $commodity, $office_type);
 
@@ -4643,6 +4644,57 @@ class ReportController extends AppController
 						->footer("Page: {PAGE} of {PAGETOTAL} & Time: date('Y-m-d H:i:s')", "")
 						->execute();
 				}
+				else{
+					$query = ReportCustomComponent::getHoAllStaticsCounts($from_date, $to_date, $commodity, $office_type,'RAL');
+
+					$sql = "SELECT ofsc_name, inward, forward, forward_to_test, internal, external, commodity_name FROM temp_reportico_ho_all_office_statistic WHERE user_id ='$user_id' ORDER BY ofsc_name";
+
+
+					ini_set("include_path", reporticoReport);
+					require_once("vendor/autoload.php");
+					require_once("vendor/reportico-web/reportico/src/Reportico.php");
+
+					Builder::build()
+					
+						->properties(["bootstrap_preloaded" => true])
+						->datasource()->database("pgsql:host=" . ForReportsConnection . "; dbname=" . ForReportsDB)->user(ForReportsUserName)->password(ForReportsPassword)
+						->title($report_name)
+
+						->sql($sql)
+
+						->column("ofsc_name")->justify("center")->label("RAL/CAL")
+						->column("inward")->justify("center")->label("Sample Accepted by Inward Officer")
+						->column("forward")->justify("center")->label("Forwarded by RAL/CAL to Other RAL/CAL")
+						->column("forward_to_test")->justify("center")->label("With Chemist for Test")
+						->column("internal")->justify("center")->label("Finalized by Incharge(Internal Sample)")
+						->column("external")->justify("center")->label("Finalized by Incharge(RO/SO Sample)")
+
+						// ->to('CSV') //Auto download excel file	
+
+						->expression("total1")->sum("inward", "commodity_name")
+						->expression("total2")->sum("forward", "commodity_name")
+						->expression("total3")->sum("forward_to_test", "commodity_name")
+						->expression("total4")->sum("internal", "commodity_name")
+						->expression("total5")->sum("external", "commodity_name")
+
+						->group("commodity_name")
+						->header("commodity_name")
+						->customHeader("During the Period From $from_date To $to_date ", "")
+						->trailer("total1")->below("inward")->label("Total : ")
+						->trailer("total2")->below("forward")->label("Total : ")
+						->trailer("total3")->below("forward_to_test")->label("Total : ")
+						->trailer("total4")->below("internal")->label("Total : ")
+						->trailer("total5")->below("external")->label("Total : ")
+						
+
+						->page()
+						->pagetitledisplay("TopOfFirstPage")
+
+						->header($headerone, "")
+
+						->footer("Page: {PAGE} of {PAGETOTAL} & Time: date('Y-m-d H:i:s')", "")
+						->execute();
+				}
 				if ($office_type == 'RO') {
 					$query = ReportCustomComponent::getHoAllStaticsCounts($from_date, $to_date, $commodity, $office_type);
 					$sql = "SELECT ofsc_name, pending, forward, result, commodity_name FROM temp_reportico_ho_ro_all_office_statistic WHERE user_id ='$user_id' ORDER BY ofsc_name";
@@ -4682,9 +4734,54 @@ class ReportController extends AppController
 
 						->footer("Page: {PAGE} of {PAGETOTAL} & Time: date('Y-m-d H:i:s')", "")
 						->execute();
+				}else{
+					$query = ReportCustomComponent::getHoAllStaticsCounts($from_date, $to_date, $commodity, $office_type,'RAL','RO');
+					$sql = "SELECT ofsc_name, pending, forward, result, commodity_name FROM temp_reportico_ho_ro_all_office_statistic WHERE user_id ='$user_id' ORDER BY ofsc_name";
+					ini_set("include_path", reporticoReport);
+					require_once("vendor/autoload.php");
+					require_once("vendor/reportico-web/reportico/src/Reportico.php");
+
+					Builder::build()
+						->properties(["bootstrap_preloaded" => true])
+						->datasource()->database("pgsql:host=" . ForReportsConnection . "; dbname=" . ForReportsDB)->user(ForReportsUserName)->password(ForReportsPassword)
+						->title("Overall Statistical Counts(RO/SO)")
+
+						->sql($sql)
+
+						->column("ofsc_name")->justify("center")->label("RO/SO")
+						->column("pending")->justify("center")->label("Pending for Forwarding")
+						->column("forward")->justify("center")->label("Forwarded to RAL/CAL")
+						->column("result")->justify("center")->label("Result Received")
+						
+
+						// ->to('CSV') //Auto download excel file	
+
+						->expression("total1")->sum("pending", "commodity_name")
+						->expression("total2")->sum("forward", "commodity_name")
+						->expression("total3")->sum("result", "commodity_name")
+
+						->group("commodity_name")
+						->header("commodity_name")
+						->customHeader("During the Period From $from_date To $to_date ", "")
+						->trailer("total1")->below("pending")->label("Total : ")
+						->trailer("total2")->below("forward")->label("Total : ")
+						->trailer("total3")->below("result")->label("Total : ")
+
+						->page()
+						->pagetitledisplay("TopOfFirstPage")
+
+						->header($headerone, "")
+
+						->footer("Page: {PAGE} of {PAGETOTAL} & Time: date('Y-m-d H:i:s')", "")
+						->execute();
 				}
 			}
+
+			
+			
+
 		}
+
 	}
 
 	/**
@@ -5058,6 +5155,7 @@ class ReportController extends AppController
 
 		if ($this->request->is('post')) {
 			$month = $this->request->getData('month');
+			
 			$lab = $this->request->getData('lab');
 			$ral_lab = $this->request->getData('ral_lab');
 			$ral_lab = explode('~', $ral_lab);
@@ -5072,9 +5170,9 @@ class ReportController extends AppController
 			$user_id = $_SESSION['user_code'];
 			$year = $this->request->getData('year');
 			$month_name = date("F", mktime(0, 0, 0, $month, 10));
-
+			
 			$report_name = "Details of Sample Analyzed by Chemist for the month of " . $month_name . ' , ' . $year;
-
+			
 			$header1 = "भारत सरकार/Goverment of India";
 			$header2 = "कृषि और किसान कल्याण मंत्रालय /Ministry of Agriculture & Farmers Welfare";
 			$header3 = "कृषि, सहकारिता एवं किसान कल्याण विभाग / Department of Agriculture & Farmers Welfare";
@@ -5095,27 +5193,35 @@ class ReportController extends AppController
 
 			$sql = "";
 
-			if ($role == 'DOL') {
-				$query = ReportCustomComponent::getDolDetailsSampleAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
+			// if ($role == 'DOL') {
+			// 	$query = ReportCustomComponent::getDolDetailsSampleAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no, lab_name, name_chemist, sample_type_desc, working_days, check_count, check_apex_count, challenged_count, ilc_count,research_count, retesting_count, other, project_sample, commodity_name, no_of_param, other_work, total_no, norm, counts,report_date FROM temp_reportico_dol_details_sample_analyzed WHERE user_id = '$user_id'";
+			// 	}
+			// }
+			
+			// if ($role == 'Head Office') {
+			// 	$query = ReportCustomComponent::getHoDetailsSampleAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no, lab_name, name_chemist, sample_type_desc, working_days, check_count, check_apex_count, challenged_count, ilc_count,research_count, retesting_count, other, project_sample, commodity_name,  no_of_param, other_work, total_no, norm, counts,report_date FROM temp_reportico_ho_details_sample_analyzed WHERE user_id = '$user_id'";
+			// 	}
+			// }
+			
+			// if ($role == 'Admin') {
+			// 	$query = ReportCustomComponent::getAdminDetailsSampleAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no, lab_name, name_chemist, sample_type_desc, working_days, check_count, check_apex_count, challenged_count, ilc_count,research_count, retesting_count, other, project_sample, commodity_name, no_of_param, other_work, total_no, norm, counts,report_date FROM temp_reportico_admin_details_sample_analyzed WHERE user_id = '$user_id'";
+			// 	}
+			// }
+
+			// added for according to role display report by shreeya on date [28-07-2023]
+			if ($role == 'Inward Officer') {
+				$query = ReportCustomComponent::getIoDetailsSampleAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
 				if ($query == 1) {
-					$sql = "SELECT sr_no, lab_name, name_chemist, sample_type_desc, working_days, check_count, check_apex_count, challenged_count, ilc_count,research_count, retesting_count, other, project_sample, commodity_name, no_of_param, other_work, total_no, norm, counts,report_date FROM temp_reportico_dol_details_sample_analyzed WHERE user_id = '$user_id'";
+					$sql = "SELECT sr_no, lab_name, name_chemist, sample_type_desc, working_days, check_count, check_apex_count, challenged_count, ilc_count,research_count, retesting_count, other, project_sample, commodity_name, no_of_param, other_work, total_no, norm, counts,report_date FROM temp_reportico_io_details_sample_analyzed WHERE user_id = '$user_id'";
 				}
 			}
-
-			if ($role == 'Head Office') {
-				$query = ReportCustomComponent::getHoDetailsSampleAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
-				if ($query == 1) {
-					$sql = "SELECT sr_no, lab_name, name_chemist, sample_type_desc, working_days, check_count, check_apex_count, challenged_count, ilc_count,research_count, retesting_count, other, project_sample, commodity_name,  no_of_param, other_work, total_no, norm, counts,report_date FROM temp_reportico_ho_details_sample_analyzed WHERE user_id = '$user_id'";
-				}
-			}
-
-			if ($role == 'Admin') {
-				$query = ReportCustomComponent::getAdminDetailsSampleAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
-				if ($query == 1) {
-					$sql = "SELECT sr_no, lab_name, name_chemist, sample_type_desc, working_days, check_count, check_apex_count, challenged_count, ilc_count,research_count, retesting_count, other, project_sample, commodity_name, no_of_param, other_work, total_no, norm, counts,report_date FROM temp_reportico_admin_details_sample_analyzed WHERE user_id = '$user_id'";
-				}
-			}
-
+			
 			if ($sql == "") {
 				return $this->redirect("/report/index");
 			}
@@ -7056,33 +7162,42 @@ class ReportController extends AppController
 
 			$sql = "";
 
-			if ($role == 'DOL') {
-				$query = ReportCustomComponent::getDolConsolidatedReporteAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
-				if ($query == 1) {
-					$sql = "SELECT sr_no,lab_name, name_chemist, sample_type_desc, project_sample, check_count ,counts , check_apex_count, challenged_count, ilc_count, research_count, retesting_count,other_private_sample, smpl_analysed_instrn, report_date 
-					FROM temp_dol_consolidated_reporte_analyzed_by_chemists WHERE user_id = '$user_id'";
-				}
-			}
+			// if ($role == 'DOL') {
+			// 	$query = ReportCustomComponent::getDolConsolidatedReporteAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no,lab_name, name_chemist, sample_type_desc, project_sample, check_count ,counts , check_apex_count, challenged_count, ilc_count, research_count, retesting_count,other_private_sample, smpl_analysed_instrn, report_date 
+			// 		FROM temp_dol_consolidated_reporte_analyzed_by_chemists WHERE user_id = '$user_id'";
+			// 	}
+			// }
 
-			if ($role == 'Head Office') {
-				$query = ReportCustomComponent::getHoConsolidatedReporteAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
+			// if ($role == 'Head Office') {
+			// 	$query = ReportCustomComponent::getHoConsolidatedReporteAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no,lab_name, name_chemist, sample_type_desc, project_sample, check_count, counts, check_apex_count, challenged_count, ilc_count, research_count, retesting_count,other_private_sample, smpl_analysed_instrn, report_date 
+			// 		FROM temp_consolidated_reporte_analyzed_by_chemists WHERE user_id = '$user_id'";
+				
+			// 	}
+				
+				
+			// }
+			// if ($role == 'Admin') {
+			// 	$query = ReportCustomComponent::getAdminConsolidatedReporteAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
+			// 	if ($query == 1) {
+			// 		$sql = "SELECT sr_no,lab_name, name_chemist, sample_type_desc, project_sample, check_count, counts,check_apex_count, challenged_count, ilc_count, research_count, retesting_count,other_private_sample, smpl_analysed_instrn, report_date 
+			// 		FROM temp_admin_consolidated_reporte_analyzed_by_chemists WHERE user_id = '$user_id'";
+			// 	}
+			// }
+
+			if ($role == 'Inward Officer') {
+				$query = ReportCustomComponent::getIoConsolidatedReporteAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
 				if ($query == 1) {
 					$sql = "SELECT sr_no,lab_name, name_chemist, sample_type_desc, project_sample, check_count, counts, check_apex_count, challenged_count, ilc_count, research_count, retesting_count,other_private_sample, smpl_analysed_instrn, report_date 
-					FROM temp_consolidated_reporte_analyzed_by_chemists WHERE user_id = '$user_id'";
+					FROM temp_io_consolidated_reporte_analyzed_by_chemists WHERE user_id = '$user_id'";
 				
 				}
-				
-				
+					
 			}
-			
-			if ($role == 'Admin') {
-				$query = ReportCustomComponent::getAdminConsolidatedReporteAnalyzedByChemist($month, $year, $ral_lab_no, $ral_lab_name);
-				if ($query == 1) {
-					$sql = "SELECT sr_no,lab_name, name_chemist, sample_type_desc, project_sample, check_count, counts,check_apex_count, challenged_count, ilc_count, research_count, retesting_count,other_private_sample, smpl_analysed_instrn, report_date 
-					FROM temp_admin_consolidated_reporte_analyzed_by_chemists WHERE user_id = '$user_id'";
-				}
-			}
-			
+
 			if ($sql == "") {
 				return $this->redirect("/report/index");
 			}

@@ -1788,7 +1788,7 @@
                 <?php if ($_SESSION['role'] == 'RAL/CAL OIC' || $_SESSION['role'] == 'Inward Officer' || $_SESSION['role'] == 'Head Office' || $_SESSION['role'] == 'Admin' || $_SESSION['role'] == 'DOL') { ?>
                     <div class="row">
                         <div class="col-md-4">
-                            <label class="labelForm"><span class="compulsoryField">*</span> Sample Type </label>
+                            <label class="labelForm">Sample Type </label>
                         </div>
                         <div class="col-md-8">
                             <?= $this->Form->control('sample_type', [
@@ -1797,7 +1797,6 @@
                                 'label' => false,
                                 'options' => $samples,
                                 'empty' => '-----Select-----',
-                                'required' => true,
                                 'id' => 'sample_type'
                             ]); ?>
                         </div>
@@ -1813,7 +1812,6 @@
                                 'type' => 'select',
                                 'class' => 'form-control',
                                 'label' => false,
-                                'required' => true,
                                 'options' => $commodity,
                                 'id' => 'Commodity',
                                 'empty' => '-----Select-----',
@@ -2124,15 +2122,15 @@
 
                 <div class="row">
                     <div class="col-md-4">
-                        <label class="labelForm"><span class="compulsoryField">*</span> Office Type </label>
+                        <label class="labelForm">Office Type </label>
                     </div>
                     <div class="col-md-8">
-                        <?php $data = ['RAL' => 'RAL', 'RO' => 'RO']; ?>
+                        <!-- add both in droupdown to get all recorde display RO/SO & RAL/CAL by shreeya on date [31-07-2023]-->
+                        <?php $data = ['RAL' => 'RAL/CAL', 'RO' => 'RO/SO'] ;/*,'Both' => 'Both'] */ ?>
                         <?= $this->Form->control('office_type', [
                             'type' => 'select',
                             'class' => 'form-control',
                             'label' => false,
-                            'required' => true,
                             'options' => $data,
                             'empty' => '-----Select-----',
                         ]); ?>
@@ -2174,7 +2172,7 @@
         </div>
     <?php echo $this->Form->end();
                     break;
-                case "details-of-sample-analyzed-by-chemist":
+                case "details-of-sample-analyzed-by-chemist";
                 case "monthly-report-of-carry-forward-and-brought-forward":
                 // case "information-of-annexure-e-along-with-mpr-division-wise":
                 case "chemist-wise-details-for-the-sample-analysed-and-carry-forward":																					  
@@ -2189,7 +2187,7 @@
                 case "sample-allotment-sheet-of-coding-section-to-the-i-c-analytical-section-of-cal--nagpur":
                 case "sample-allotment-sheet-of-i-c-analytical-section-issued-to-the-chemist-for-analysis":
                 case "perticulars-of-samples-received-and-analyzed-by-ral-annexure-d":
-                case "consolidated-report-analysed-by-chemist":															   
+                case "consolidated-report-analyzed-by-chemists":															   
     ?>
         <input type="hidden" class="form-control" name="label_name" id="label_name">
         <input type="hidden" class="form-control" name="posted_ro_office" value="<?= $_SESSION['posted_ro_office']; ?>">
