@@ -66,7 +66,7 @@
      </table> 
      <table  width="100%">
         <tr>    
-            <td><br>Subject: Impart training of <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>, <?php echo $firmName; ?>, <?php echo $firm_address; ?> for analysis, grading and marking of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark-reg.</td>
+            <td><br>Subject: Impart training of <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>, chemist of <?php echo $firmName; ?>, <?php echo $firm_address; ?> for analysis, grading and marking of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark-reg.</td>
         </tr>
                     
         <tr>
@@ -98,7 +98,7 @@
 		<tr>
 			<td>Your’s faithfully<br> 
 				 <?php echo $ro_fname."&nbsp;". $ro_lname; ?><br>
-                 Incharge, RO/SO Office.<br>
+                 Incharge, <?php echo $office_type; ?> Office<br>
 				Directorate of Marketing and Inspection<br>
                 <?php echo $ro_office;?> <br>
 			</td>
@@ -131,9 +131,9 @@
 					
 		<tr>
 			<td>
-				 <?php echo $ro_fname."&nbsp;". $ro_lname ."<br>".$role ;?><br>
-                 Incharge, RO/SO Office<br>
-				Directorate of Marketing and Inspection<br> 
+            <?php echo $ro_fname."&nbsp;". $ro_lname; ?><br>
+                 Incharge, <?php echo $office_type; ?> Office<br>
+				Directorate of Marketing and Inspection<br>
                 <?php echo $ro_office;?> <br>
 			</td>
 		</tr>
