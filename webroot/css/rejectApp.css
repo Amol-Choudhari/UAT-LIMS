@@ -1,7 +1,8 @@
 
 /*Create new file for reject chemist application at ral side  added by laxmi Bhadade on 22-05-2023 for chemist_training module*/
 .rejectAPP{
-    font-size: 20px;
+    font-size: 13px;
+    color:#fff !important;
 }
 
 /* The Modal (background) */
@@ -93,5 +94,5 @@
 
   .rejectModel{
     position: relative !important;
-    top: 6px !important;
+    top: 5px !important;
   }
