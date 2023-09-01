@@ -1,6 +1,6 @@
 <div class="container">
   <div class="col-lg-12 mx-auto text-center">
-      <p class="fontSize26"><b>Chemist Application Forwarded From RO to RAL for Training</b></p>
+      <p class="fontSize26"><b>Chemist Application Forwarded From RO/SO to RAL for Training</b></p>
        <hr/>
     </div>
 <div class="row">
@@ -10,7 +10,7 @@
       <th scope="col">#</th>
       <th scope="col">Chemist ID</th>
       <th scope="col">Chemist Name</th>
-      <th scope="col">RO Office</th>
+      <th scope="col">RO/SO Office</th>
       <th scope="col">RAL/CAL Office</th>
       <th scope="col">Forwarded On</th>
       <th scope="col">Training End On</th>
