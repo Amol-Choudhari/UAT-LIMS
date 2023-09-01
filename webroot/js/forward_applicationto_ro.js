@@ -27,7 +27,7 @@ jQuery(document).ready(function($) {
    })
    
    .on('changeDate', function (selected) {
-    $('#sheduleTo').val('');
+    $('#sheduleTo').val(''); //to change date of from become empty to date added by laxmi on 01-09-2023
       startDate = new Date(selected.date.valueOf());
       //startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
       startDate.setDate(startDate.getDate() + 1);    
@@ -64,7 +64,7 @@ $(document).ready(function(){
   }
 
 
-
+//added reschedule submit btn validation by laxmi on 01-09-2023
   $('#submitbtnn').click(function(){
    var fromDate =  $('#sheduleFrom').val();
    var toDate =  $('#sheduleTo').val();

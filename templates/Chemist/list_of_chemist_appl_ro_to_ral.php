@@ -10,7 +10,7 @@
       <th scope="col">#</th>
       <th scope="col">Chemist ID</th>
       <th scope="col">Chemist Name</th>
-      <th scope="col">RO/SO Office</th>
+      <th scope="col">RO/SO Office</th><!-- change Ro to RO/SO by laxmi on 01-09-2023 -->
       <th scope="col">RAL/CAL Office</th>
       <th scope="col">Forwarded On</th>
       <th scope="col">Training End On</th>

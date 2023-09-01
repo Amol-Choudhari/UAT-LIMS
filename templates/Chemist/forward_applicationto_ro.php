@@ -17,6 +17,7 @@
       <div class="row">
         <div class="col-md-12 row">
           <div class="col-md-2">
+            <!-- added incharge by laxmi on 01-09-2023 -->
             <label for="field3"><span>RAL, In-charge, First Name <span class="required-star">*</span></span></label>
           </div>
           <div class="col-md-4">
@@ -80,7 +81,8 @@
                     </div>
                     <div class="col-md-4">
                     <?php echo $this->Form->control('reshedule_from_date',['class' => 'form-control datepicker-here', 'label' => false,'id' => 'sheduleFrom','value'=>$scheduleFrom, 'type' => 'Text']); ?>
-                    <div class="err_cv_reshedule_from_date text-red"></div>
+                    <div class="err_cv_reshedule_from_date text-red"></div> 
+                    <!-- added error field by laxmi on 01-09-2023 -->
                     <?php } ?>
                     
                     </div>
@@ -112,7 +114,7 @@
                     </div>
                     <div class="col-md-4">
                     <?php echo $this->Form->control('reshedule_to_date',['class' => 'form-control datepicker-here', 'label' => false,'id' => 'sheduleTo','value'=>$scheduleTo, 'type' => 'Text']); ?>
-                    <div class="err_cv_reshedule_to_date text-red"></div>
+                    <div class="err_cv_reshedule_to_date text-red"></div><!-- added error field by laxmi on 01-09-2023 -->
                     </div>
                     <?php } ?>
                     </div>
