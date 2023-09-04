@@ -526,7 +526,7 @@
   
   
                   $chemistdetails = $this->DmiChemistRegistrations->find('all')->where(array('chemist_id IS'=>$customer_id))->first();
-                
+                  
                   if(!empty($chemistdetails['is_training_completed']) && $chemistdetails['is_training_completed'] == 'no' ){
                   
                   $charge = $this->DmiChemistPaymentDetails->find('list', array('valueField'=>'amount_paid'))->where(array('customer_id'=>$customer_id))->last();
@@ -544,7 +544,7 @@
   
   
                   $firmDetails = $this->DmiFirms->find('all')->where(array('customer_id IS'=>$chemistdetails['created_by']))->first();
-                  
+                
                   if(!empty($firmDetails)){
                   $this->set('firmName',$firmDetails['firm_name']);
                   $this->set('firm_address',$firmDetails['street_address']);
@@ -572,7 +572,7 @@
                   }
                   $unique_commodity_id = array_unique($commodity_id);  
                   $commodity_name_list = $this->MCommodityCategory->find('all',array('conditions'=>array('category_code IN'=>$unique_commodity_id, 'display'=>'Y')))->toArray();
-                 
+                  
                   $this->set('commodity_name_list',$commodity_name_list);     
                   $this->set('sub_commodity_data',$sub_commodity_data);
                      
@@ -605,7 +605,7 @@
                  
                   // get reschedule from and to date
                    $rescheduleDate = $this->DmiChemistRalToRoLogs->find('all')->where(['chemist_id IS'=>$customer_id])->last();
-  
+                   
                   $dateF = date('d-m-Y',strtotime(str_replace('/', '-',$rescheduleDate['reshedule_from_date'])));
                   $dateTo = date('d-m-Y',strtotime(str_replace('/', '-',$rescheduleDate['reshedule_to_date'])));
   
@@ -614,9 +614,9 @@
                   }
   
                   $all_data_pdf = $this->render('/Chemist/chemist_appl_training_schedule_at_ral');
-  
+                  
                   $split_customer_id = explode('/',(string) $customer_id); #For Deprecations
-  
+                  
                   $pdfPrefix = 'forward_letter_to_ral';
                   $rearranged_id = $pdfPrefix.'('.$split_customer_id[0].'-'.$split_customer_id[1].'-'.$split_customer_id[2].')';
   
@@ -643,12 +643,12 @@
                   //creating filename and file path to save               
   
                   $file_name = $rearranged_id.'('.$current_pdf_version.')'.'.pdf';
-  
+                 
                   $this->DmiChemistRalToRoLogs->updateAll(
                   array('reshedule_pdf' => $file_path, 'reshedule_version'=>$current_pdf_version),
                   array('chemist_id'=>$customer_id));
   
-                  $file_path = $_SERVER["DOCUMENT_ROOT"].$file_path;
+                  $file_path = $_SERVER["DOCUMENT_ROOT"].$file_path; 
                   //to preview application
                   $this->callTcpdf($all_data_pdf,'F',$customer_id,'chemist',$file_path);//with save mode
                   //$this->callTcpdf($all_data_pdf,'I',$customer_id,'chemist',$file_path);//on with preview mode
