@@ -127,8 +127,10 @@
             
             $ral_office = $_SESSION['ro_office'];
             $this->set('ral_office', $ral_office);
-            $ro_office_name = $this->DmiRoOffices->find('list', array('valueField'=>'ro_office', 'conditions'=>array('id IS'=>$chemistRoForwardData[0]['ro_office_id'])))->first(); 
-            $this->set('ro_office', $ro_office_name);
+            $ro_office = $this->DmiRoOffices->find('all', array('fields'=>['ro_office', 'office_type'], 'conditions'=>array('id IS'=>$chemistRoForwardData[0]['ro_office_id'])))->first(); 
+           
+            $this->set('ro_office', $ro_office['ro_office']);
+            $this->set('ro_office_type', $ro_office['office_type']);
             $chemist_fname = $chemistRoForwardData[0]['chemist_first_name'];
             $chemist_lname = $chemistRoForwardData[0]['chemist_last_name'];
             $chemist_id    = $chemistRoForwardData[0]['chemist_id'];
@@ -203,6 +205,7 @@
             'reshedule_to_date' => date('Y-m-d H:i:s', strtotime(str_replace('/','-',$fetchData['reshedule_to_date']))),
              'reshedule_from_date' => date('Y-m-d H:i:s', strtotime(str_replace('/','-',$fetchData['reshedule_from_date']))),
              'reshedule_status' => 'confirm',
+             'modified'=>date('Y-m-d H:i:s')
              ));
               
              $result = $this->DmiChemistRalToRoLogs->save($data);
@@ -237,7 +240,7 @@
                   $this->DmiChemistAllCurrentPositions->currentUserUpdate($customer_id,$user_email_id,$current_level);
                 }
 
-             $message ="Chemist Application Forwarded to RO Office ".$office_name. " And the email id is " .base64_decode($office_incharge_id)."";
+             $message ="Chemist Application Forwarded to " .$ro_office['office_type']. " Office ".$office_name. " And the email id is " .base64_decode($office_incharge_id)."";
              $message_theme = "success";
              $redirect_to = '../chemistApplRalToRo/'.$lastInsertedId;
              }else{
@@ -275,6 +278,8 @@
                 'ro_office_id'    =>$ro_office_id,
                 'ral_office_id'   =>$this->Session->read('posted_ro_office'),
                 'application_type'=> 4,
+                'modified'=>date('Y-m-d H:i:s'),
+                'created' =>date('Y-m-d H:i:s')
 
                 ));
                 
@@ -424,7 +429,11 @@
                    $this->set('ral_office', $ral_office['ro_office']);
                   }
                 }
-                  
+                  // to create O.M. No. below code is added -by laxmi bhadade[04-09-2023]
+                   
+                  $om_no = "0".$id."/" .$ralforwardedRo['chemist_id']. "/" .date('M'). "/" .date('Y');
+                  $this->set('om_no',$om_no);
+
                   $customer_id = $ralforwardedRo['chemist_id'];  
                   $all_data_pdf = $this->render('/Chemist/chemist_appl_ral_to_ro');
 		
@@ -453,11 +462,11 @@
 				               
 		                 $filename = $_SERVER["DOCUMENT_ROOT"].$file_path;
                      //creating filename and file path to save				
-				
+				               
 		                 $file_name = $rearranged_id.'('.$current_pdf_version.')'.'.pdf';
 		
 		                $this->DmiChemistRalToRoLogs->updateAll(
-			               array('pdf_file' => $file_path, 'pdf_version'=>$current_pdf_version),
+			               array('pdf_file' => $file_path, 'pdf_version'=>$current_pdf_version,'om_no'=>$om_no,'modified'=>date('d/m/Y H:i:s')),
 			              array('chemist_id'=>$customer_id));
         
 		                $file_path = $_SERVER["DOCUMENT_ROOT"].$file_path;

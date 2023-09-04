@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-md-2">
                     <?php if(!empty($reshedule_status) && empty($training_completed)){ ?>
-                    <label for="field3"><span>Ro Offices <span class="required-star">*</span></span></label>
+                    <label for="field3"><span><?php if(!empty($ro_office_type)){ echo $ro_office_type; }?> Offices <span class="required-star">*</span></span></label>
                     </div>
                     <div class="col-md-4">
                     <?php echo $this->Form->control('ro_office', array('type'=>'text', 'id'=>'roOffice', 'escape'=>false, 'value'=>$ro_office, 'placeholder'=>'Enter First Name', 'class'=>'cvOn cvReq cvAlphaNum form-control', 'maxlength'=>255, 'disabled'=>true, 'label'=>false)); ?>
