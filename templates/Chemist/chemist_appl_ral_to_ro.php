@@ -95,7 +95,7 @@
 
         <tr>
             <td>
-               With reference to the <?php echo $office_type; ?>  Office, O.M. No. <?php echo $om_no; ?> on <?php echo date('d/m/Y');?>, regarding providing the training 
+               With reference to the <?php echo $chemist_id; ?> dated <?php echo date('d/m/Y');?>, regarding providing the training 
                 to <?php echo $prefix. "&nbsp;" .$chemist_fname. "&nbsp;".$chemist_lname;?> <?php echo $middle_name_type; ?> <?php echo $parent_name; ?>  for analysis , grading and marking of <?php echo $commodities_cate_list ;?> (<?php echo $sub_commodities_list ;?>) under  Agmark.
                 In this  regard it is informed that <?php echo $prefix. "&nbsp;" .$chemist_fname."&nbsp;".$chemist_lname;?> <?php echo $middle_name_type; ?> <?php echo $parent_name; ?> has attended the training for analysis, 
                 grading and marking of <?php echo $commodities_cate_list ;?> (<?php echo $sub_commodities_list ;?>) under Agmark from <?php echo $schedule_from; ?> to <?php echo $schedule_to; ?> at Regional Agmark Laboratory <?php echo $ral_office; ?> . 
