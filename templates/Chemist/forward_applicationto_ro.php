@@ -17,7 +17,8 @@
       <div class="row">
         <div class="col-md-12 row">
           <div class="col-md-2">
-            <label for="field3"><span>RAL First Name <span class="required-star">*</span></span></label>
+            <!-- added incharge by laxmi on 01-09-2023 -->
+            <label for="field3"><span>RAL, In-charge, First Name <span class="required-star">*</span></span></label>
           </div>
           <div class="col-md-4">
             <?php echo $this->Form->control('ro_first_name', array('type'=>'text', 'id'=>'rofirstname', 'escape'=>false, 'value'=>$ral_fname, 'placeholder'=>'Enter First Name', 'class'=>'cvOn cvReq cvAlphaNum form-control', 'maxlength'=>255, 'readonly'=>true, 'label'=>false)); ?>
@@ -70,17 +71,20 @@
                     </div>
                     <div class="col-md-2">
                     <?php if(!empty($reshedule_status) && empty($training_completed)){ ?>
-                    <label for="field3"><span>Ro Offices <span class="required-star">*</span></span></label>
+                    <label for="field3"><span><?php if(!empty($ro_office_type)){ echo $ro_office_type; }?> Offices <span class="required-star">*</span></span></label>
                     </div>
                     <div class="col-md-4">
                     <?php echo $this->Form->control('ro_office', array('type'=>'text', 'id'=>'roOffice', 'escape'=>false, 'value'=>$ro_office, 'placeholder'=>'Enter First Name', 'class'=>'cvOn cvReq cvAlphaNum form-control', 'maxlength'=>255, 'disabled'=>true, 'label'=>false)); ?>
+                    <div class="err_cv_ro_office"></div>
                     <?php }else{ ?>
                     <label for="field3"><span>Reschedule From Date<span class="required-star">*</span></span></label>
                     </div>
                     <div class="col-md-4">
                     <?php echo $this->Form->control('reshedule_from_date',['class' => 'form-control datepicker-here', 'label' => false,'id' => 'sheduleFrom','value'=>$scheduleFrom, 'type' => 'Text']); ?>
+                    <div class="err_cv_reshedule_from_date text-red"></div> 
+                    <!-- added error field by laxmi on 01-09-2023 -->
                     <?php } ?>
-                    <div class="err_cv_ro_office"></div>
+                    
                     </div>
                     </div>
                     </div>
@@ -110,7 +114,7 @@
                     </div>
                     <div class="col-md-4">
                     <?php echo $this->Form->control('reshedule_to_date',['class' => 'form-control datepicker-here', 'label' => false,'id' => 'sheduleTo','value'=>$scheduleTo, 'type' => 'Text']); ?>
-                  
+                    <div class="err_cv_reshedule_to_date text-red"></div><!-- added error field by laxmi on 01-09-2023 -->
                     </div>
                     <?php } ?>
                     </div>
@@ -141,8 +145,9 @@
                     </div>
                     </div>
                     <?php }else{ ?>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-3">
+                    <div class="col-md-3"></div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="col-md-2">
                     <button type="submit" value="submit" id="submitbtnn" class="form-control btn btn-success">Reschedule Dates
                     </button>
                     <?php } ?>

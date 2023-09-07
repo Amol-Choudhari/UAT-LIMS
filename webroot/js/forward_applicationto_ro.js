@@ -22,9 +22,12 @@ jQuery(document).ready(function($) {
       setDate: new Date(),
       autoclose: true,
       startDate:'+0d',
-      format: 'dd/mm/yyyy'
+      format: 'dd/mm/yyyy',
+      
    })
+   
    .on('changeDate', function (selected) {
+    $('#sheduleTo').val(''); //to change date of from become empty to date added by laxmi on 01-09-2023
       startDate = new Date(selected.date.valueOf());
       //startDate.setDate(startDate.getDate(new Date(selected.date.valueOf())));
       startDate.setDate(startDate.getDate() + 1);    
@@ -60,4 +63,26 @@ $(document).ready(function(){
     $("#submitbtnn")[0].click();
   }
 
+
+//added reschedule submit btn validation by laxmi on 01-09-2023
+  $('#submitbtnn').click(function(){
+   var fromDate =  $('#sheduleFrom').val();
+   var toDate =  $('#sheduleTo').val();
+   var returnValue = true;
+   if(fromDate == ''){
+    $('.err_cv_reshedule_from_date').html("Please select Reschedule From Date");
+    returnValue = false;
+   }
+   if(toDate == ''){
+    $('.err_cv_reshedule_to_date').html("Please select Reschedule To Date");
+    returnValue = false;
+   }
+
+
+   if(returnValue == false){
+    return false;
+   }else{
+    return true;
+   }
+  });
 });

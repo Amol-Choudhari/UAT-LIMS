@@ -30,10 +30,28 @@
     
     $sub_commodities_list = implode(',',$sub_commodities_array);
     $commodities_cate_list = implode(',',$commodity_cat_array);
+    //set chemist prefix on the basis of middle name type added by laxmi on 01-09-2023
+    if(!empty($middle_name_type)){
+        if($middle_name_type == 'D/o'){
+            $prefix = 'Ms.';
+            $his_her = 'her';
+            $mam_sir = 'madam';
+        }elseif($middle_name_type == 'S/o'){
+            $prefix = 'Shri.';
+            $his_her = 'his';
+            $mam_sir = 'sir';
+        }elseif($middle_name_type == 'W/o'){
+            $prefix = 'Smt.';
+            $his_her = 'her';
+            $mam_sir = 'madam';
+        }
+        
+    }
 ?>
 	
     <table width="100%" border="1">
-        <tr><td align="center" style="padding:5px;"><h4>Letter from RO to RAL schedule Training </h4></td></tr>
+        <!-- if application from sub office show So in title added by laxmi [01-09-2023] -->
+        <tr><td align="center" style="padding:5px;"><h4>Letter from <?php if(!empty($office_type)){ echo $office_type; }?> to RAL schedule Training </h4></td></tr>
     </table>
 
     <table width="100%" border="1">
@@ -66,20 +84,20 @@
      </table> 
      <table  width="100%">
         <tr>    
-            <td><br>Subject: Impart training of <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>, chemist of <?php echo $firmName; ?>, <?php echo $firm_address; ?> for analysis, grading and marking of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark-reg.</td>
+            <td><br>Subject: Impart training of <?php echo $prefix."&nbsp;". $chemist_fname."&nbsp;". $chemist_lname ;?>, chemist of <?php echo $firmName; ?>, <?php echo $firm_address; ?> for analysis, grading and marking of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark-reg.</td>
         </tr>
                     
         <tr>
-            <td><br>Dear Sir,</td><br>
+            <td><br>Dear Sir/Madam,</td><br>
         </tr>   
 
         <tr>
-            <td>With reference to above cited subject, it is to inform that <?php echo $firmName; ?>, <?php echo $firm_address; ?> has sponsored his chemist <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>  <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> 
+            <td>With reference to above cited subject, it is to inform that <?php echo $firmName; ?>, <?php echo $firm_address; ?> has sponsored his chemist <?php  echo $prefix."&nbsp;". $chemist_fname."&nbsp;". $chemist_lname ;?>  <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> 
             for training for analysis, grading & marking of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark.<br>
 			
 			The training charges of Rs. <?php echo $charges; ?> & necessary documents have been submitted in
             <?php echo $office_type; ?> office, <?php echo $ro_office;?>. In this connection it is requested to provide training to  
-             <?php echo $chemist_fname."&nbsp;". $chemist_lname ;?>  <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> for analysis, grading & marking  of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark.<br>
+             <?php echo $prefix."&nbsp;". $chemist_fname."&nbsp;". $chemist_lname ;?>  <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> for analysis, grading & marking  of <?php echo $commodities_cate_list; ?> ( <?php echo $sub_commodities_list; ?> ) under Agmark.<br>
            The training has been scheduled from the <?php echo $schedule_from;?> to <?php echo $schedule_to;?>.
 	
 			</td>
@@ -118,7 +136,7 @@
 			 
             1.<?php echo $firmName; ?>, <?php echo $firm_address; ?> with this instruction to depute your chemist for necessary
                 training in Regional Agmark Laboratory <?php echo $ral_office; ?>.<br>
-            2.<?php echo $chemist_fname."&nbsp;". $chemist_lname ;?> <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> <?php echo $address; ?> to impart the training.
+            2.<?php echo $prefix."&nbsp;". $chemist_fname."&nbsp;". $chemist_lname ;?> <?php echo $middle_name_type; ?>  <?php echo $parent_name; ?> <?php echo $address; ?> to impart the training.
 			</td>
 		</tr>
 		<tr>
