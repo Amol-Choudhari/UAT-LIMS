@@ -760,13 +760,15 @@
                  if(!empty($grant_list)){
                   foreach($grant_list as $each_l){ 
                     if(!empty($each_l ['user_email_id'])){
-                    $ro_office = $this->DmiRoOffices->find('all', ['valueField'=>['ro_office']])->where(['ro_email_id IS'=>$each_l['user_email_id']])->first();
+                      $ro_ID = $this->DmiChemistTrainingAtRo->find('all',['fields'=>['ro_office_id']])->where(['chemist_id IS'=>$each_l['customer_id'] , 'training_completed IS'=>1])->last();
+                    
+                      $ro_office = $this->DmiRoOffices->find('all', ['valueField'=>['ro_office']])->where(['ro_email_id IS'=>$each_l['user_email_id'],'id IS'=> $ro_ID['ro_office_id']])->first();
                 
-                    $ro_office_name [$i] = $ro_office['ro_office'];
-                    $chemist_nameDetails = $this->DmiChemistRegistrations->find('all', ['valueField'=>['chemist_fname', 'chemist_lname']])->where(['chemist_id IS'=>$each_l['customer_id']])->first();
-                    $chemist_fname[$i] = $chemist_nameDetails['chemist_fname'];
-                    $chemist_lname[$i] = $chemist_nameDetails['chemist_lname'];
-                    $i++;
+                      $ro_office_name [$i] = $ro_office['ro_office'];
+                      $chemist_nameDetails = $this->DmiChemistRegistrations->find('all', ['valueField'=>['chemist_fname', 'chemist_lname']])->where(['chemist_id IS'=>$each_l['customer_id']])->first();
+                      $chemist_fname[$i] = $chemist_nameDetails['chemist_fname'];
+                      $chemist_lname[$i] = $chemist_nameDetails['chemist_lname'];
+                      $i++;
                    }
                     
                   }
